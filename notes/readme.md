@@ -993,9 +993,9 @@ Las peticiones HTTP van acompañadas de un “verbo” que define el tipo de pet
 
 No es recomendable habilitar un endpoint de tipo PUT y DELETE para toda nuestra colección de datos, sólo hacerlos para recursos específicos, ya que no queremos que por error se puedan borrar todos nuestros datos.
 
-## Estructura de una película con Moockaru
+## Estructura de una película con Mockaroo
 
-**Mockaroo** es un servicio que nos permite crear datos simulados a partir de una estructura, por ejemplo para generar la estructura de nuestra película:
+[Mockaroo](https://mockaroo.com/) es un servicio que nos permite crear datos simulados a partir de una estructura, por ejemplo para generar la estructura de nuestra película:
 
 ```json
 {
@@ -1031,6 +1031,741 @@ Luego seleccionamos el número de filas (rows) que queremos generar y elegimos e
 <div align="center">
   <img src="./assets/mockaroo-preview.jpg" alt="mockaroo estrucutura">
 </div>
+
+## Implementando un CRUD en expres.js
+
+CRUD viene de las siglas: create read updated and delete esto significa crear, leer, actualizar y eliminar.
+
+Nosotros vamos a obtener las rutas mediante el verbo GET. A continuación se muestran las rutas que vamos a ocupar para trabajar:
+
+<div align="center">
+  <img src="./assets/routes.png" alt="rutas">
+</div>
+
+Ahora vamos a implementar un crud en nuestro código:
+
+Para crear una ruta necesitamos de express pues es quien nos define el router, luego vamos a usar en esté caso un archivo de mocks, los mocks son archivos falsos, de datos falsos, pero más adelante vamos a aprender cuando nos conectemos con servicios y como conectarnos a la base de datos para traer archivos reales, en este ejemplo lo estamos haciendo, porque lo que nos interesa ahora es entender como se definen las rutas y esos archivos de mocks nos van a servir más adelante para escribir test y verificar.  
+
+```js
+/**
+ * Para crear una ruta necesitamos de express pues es quien nos define el router
+ */
+const express = require("express");
+const { moviesMock } = require();
+
+/** vamos a recibir una aplicación de express, lo que nos permite ser dinamicos y obtener el control,
+ * sobre que aplicación va a consumir nuestra ruta.
+*/
+
+function moviesApi(app) {
+  // creamos el router
+  const router = express.Router();
+  // le decimos a la aplicación que le vamos a pasar como parametro le vamos a decir la ruta de inicio
+  app.use("/api/movies", router)
+
+  // Apartir de aqui lo que hacemos es alimentar el router con las otras rutas
+  // Cuando se le asigna un get al home, y el home va a ser api/movies, que fue el que definimos arriba
+
+/* nos va a devolver las salidas, como estamos escribiendo código asincrono debemos usar la palabra
+   clave async, recuerden que una ruta recibe el request, el response object y en este caso vamos a 
+   recibir la funcionalidad next, esto hace parte de la teoria de middleware que vamos a explicar 
+   más adelante
+*/
+  router.get("/", async function (req, res, next) {
+    // como es código asincron es muy importante utilizar el try catch
+    try {
+      // es importante que como nuestro codigo es un await debemos envolverlo
+      // en una promesa para que puedamos hacer uso de nuestro código asincrono con la palabra await
+      const movies = await Promise.resolve(moviesMock);
+
+      // Usamos response, definimos el estatus, que como hablamos con anterioridad va a ser 200 de ok
+      // definimos su estructura json
+      res.status(200).json({
+        data: movies,
+        message: 'movies listend'
+      })
+    } catch (error) {
+      next(error);
+    }
+  })
+}
+
+// Ahora tenemos que exportarla, porque aquí estamos definiendo la ruta pero no la estamos usando
+// en nuestra aplicación de express
+
+module.exports = moviesApi;
+```
+
+Ahora nos vamos a nuestro archivo index, removemos las rutas de ejemplo que creamos con anterioridad, e importamos nuestra ruta, como es una función debemos ejecutarla y pasarle nuestra aplicación de express.
+
+Con esto sería suficiente, pero es muy importante crear nuestro archivo de mocks, usamos una aplicación que se llama mockroo que nos ayuda a crear mocks fácilmente de una estructura.  
+
+El archivo de mocks estará disponible en este repositorio.
+
+## Métodos idempotentes del CRUD
+
+Acabamos de ver como podemos listar las peliculas, ahora lo que vamos a ver es el resto de métodos de ``CRUD``, para eso vamos a mirar el código.
+
+Como vemos en el siguiente coódigo los método del CRUD tienen una estrucutura muy similar, para eso vamos a copiar el método get 4 veces y le haremos algunas modificaciones
+
+```js
+/**
+ * Para crear una ruta necesitamos de express pues es quien nos define el router
+ */
+const express = require("express");
+const { moviesMock } = require("../utils/mocks/movies");
+
+/** vamos a recibir una aplicación de express, lo que nos permite ser dinamicos y obtener el control,
+ * sobre que aplicación va a consumir nuestra ruta.
+*/
+
+function moviesApi(app) {
+  // creamos el router
+  const router = express.Router();
+  // le decimos a la aplicación que le vamos a pasar como parametro le vamos a decir la ruta de inicio
+  app.use("/api/movies", router)
+
+  // Apartir de aqui lo que hacemos es alimentar el router con las otras rutas
+  // Cuando se le asigna un get al home, y el home va a ser api/movies, que fue el que definimos arriba
+
+  /* nos va a devolver las salidas, como estamos escribiendo código asincrono debemos usar la palabra
+     clave async, recuerden que una ruta recibe el request, el response object y en este caso vamos a 
+     recibir la funcionalidad next, esto hace parte de la teoria de middleware que vamos a explicar 
+     más adelante
+  */
+  router.get("/", async function (req, res, next) {
+    // como es código asincron es muy importante utilizar el try catch
+    try {
+      // es importante que como nuestro codigo es un await debemos envolverlo
+      // en una promesa para que puedamos hacer uso de nuestro código asincrono con la palabra await
+      const movies = await Promise.resolve(moviesMock);
+
+      // Usamos response, definimos el estatus, que como hablamos con anterioridad va a ser 200 de ok
+      // definimos su estructura json
+      res.status(200).json({
+        data: movies,
+        message: 'movies list'
+      })
+    } catch (error) {
+      next(error);
+    }
+  })
+
+  // Obtener movie por id
+  router.get("/:movieId", async function (req, res, next) {
+    try {
+      const movies = await Promise.resolve(moviesMock[0]);
+      res.status(200).json({
+        data: movies,
+        message: 'movies retrieved'
+      })
+    } catch (error) {
+      next(error);
+    }
+  })
+
+  // create
+  router.post("/", async function (req, res, next) {
+    try {
+      const createdMovieId = await Promise.resolve(moviesMock[0].id);
+      res.status(201).json({
+        data: createdMovieId,
+        message: 'movie created'
+      })
+    } catch (error) {
+      next(error);
+    }
+  })
+
+  // PUT - actualizar
+  router.put("/:movieId", async function (req, res, next) {
+    try {
+      const updatedMovieId = await Promise.resolve(moviesMock[0].id);
+      res.status(200).json({
+        data: updatedMovieId,
+        message: 'movie updated'
+      })
+    } catch (error) {
+      next(error);
+    }
+  })
+
+  // delete
+  router.delete("/:movieId", async function (req, res, next) {
+    try {
+      const deleteMovieId = await Promise.resolve(moviesMock[0].id);
+      res.status(200).json({
+        data: deleteMovieId,
+        message: 'movies deleted'
+      })
+    } catch (error) {
+      next(error);
+    }
+  })
+
+}
+// Ahora tenemos que exportarla, porque aquí estamos definiendo la ruta pero no la estamos usando
+// en nuestra aplicación de express
+
+  module.exports = moviesApi;
+```
+
+Antes de continuar ya que es un buen momento para hacer commit, me gustaría hablar de algo que se llama el gitignore, es un archivo de configuración que le dice a git que archivos no debemos compartir, hay archivos inecesarios como node_modules entre otras, que no tiene sentido compartirla con las demás, pues esos archivos se generan por el sistema operativo o por carpeta o por usuario. La herramienta de [ignore.io](http://gitignore.io/) me permite definir precisamente esos hambientes, como nuestro proyecto es de node vamos a seleccionar ese tag, y como no sabemos quien va a poder usar esté proyecto, podemos agregar las 3 sistemas operativos, windows, mac y linux.
+
+
+## Implementando una capa de servicios en express
+
+Está aquitectura es una versión simplificada de [Clean Architecture](https://translate.google.com/translate?hl=&sl=en&tl=es&u=https%3A%2F%2Fblog.cleancoder.com%2Funcle-bob%2F2012%2F08%2F13%2Fthe-clean-architecture.html)
+
+<div align="center">
+  <img src="./assets/clean-arquitect.png" alt="clean arquitect">
+</div>
+
+¿Por que la comparto o la recomiendo?
+
+Porque MVC que es la arquitectura tradicional a la que estamos acostumbrados, se queda corta en las aplicaciones modernas, no nos basta solo con tener: modelo, vista y controlador. Entonces lo que nosotros definimos en una aplicación en express: **los controladores que son toda la capa de middlewares y el router** que se comunican con la API y reciben o envían JSON, luego temos una capa de servicios, aquí es muy importante porque aquí es el corazón de nuestra aplicación, aquí es donde está toda la logica de negocio y es importante saber que **los controladores NO llaman a otros controladores** los controladores **solo llaman servicios**. Pero los servicios si pueden llamar otros servicios o llamar librerias, las librerías son la capa que esta adjunta a librerias externas, como por ejemplo: bases de datos, bases de datos que estan en la nube o incluso otras API. 
+
+Diferentes razones y opiniones sobre porque dejar de usar MVC:
+
+- [Cleand coder](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Ryan Florence](https://www.youtube.com/watch?v=kp-NOggyz54)
+- [Laravel no es mvc](https://styde.net/porque-laravel-no-es-mvc-y-tu-deberias-olvidarte-de-mvc/)
+- [Twitt sobre mvc por founder de Laravel](https://twitter.com/taylorotwell/status/262290285499936768)
+
+Ahora vamos a ver como implementar [Clean Architecture ](https://translate.google.com/translate?hl=&sl=en&tl=es&u=https%3A%2F%2Fblog.cleancoder.com%2Funcle-bob%2F2012%2F08%2F13%2Fthe-clean-architecture.html) en nuestro código
+
+Implementación de la capa de servicios:
+
+```js
+const { moviesMock } = require("../utils/mocks/movies");
+
+class MoviesService {
+  async getMovies() {
+    const movies = await Promise.resolve(moviesMock);
+    return movies || [];
+  }
+
+  async getMovie() {
+    const movie = await Promise.resolve(moviesMock[0]);
+    return movie || {};
+  }
+
+  async createMovie() {
+    const createMovieId = await Promise.resolve(moviesMock[0].id);
+    return createMovieId || {};
+  }
+
+  async updateMovie() {
+    const deletedMovieId = await Promise.resolve(moviesMock[0].id);
+    return deletedMovieId;
+  }
+
+}
+
+module.exports = MoviesService;
+```
+
+Implementación de CRUD en express:
+
+```js
+const express = require("express");
+const MoviesServices = require('../services/movies');
+
+function moviesApi(app) {
+  const router = express.Router();
+  app.use("/api/movies", router);
+
+  const moviesService = new MoviesServices();
+
+  router.get("/", async function (req, res, next) {
+    const { tags } = req.query;
+    try {
+      const movies = await moviesService.getMovies({ tags });
+
+      res.status(200).json({
+        data: movies,
+        message: 'movies list'
+      })
+    } catch (error) {
+      next(error);
+    }
+  })
+
+  // Obtener movie por id
+  router.get("/:movieId", async function (req, res, next) {
+    const { movieId } = req.params;
+    try {
+      const movies = await moviesService.getMovie({ movieId });
+      res.status(200).json({
+        data: movies,
+        message: 'movies retrieved'
+      })
+    } catch (error) {
+      next(error);
+    }
+  })
+
+  // create
+  router.post("/", async function (req, res, next) {
+    const { body: movie } = req;
+    try {
+      const createdMovieId = await moviesService.createMovie({ movie })
+      res.status(201).json({
+        data: createdMovieId,
+        message: 'movie created'
+      })
+    } catch (error) {
+      next(error);
+    }
+  })
+
+  // PUT - actualizar
+  router.put("/:movieId", async function (req, res, next) {
+    const { movieId } = req.params;
+    const { body: movie } = req;
+    try {
+      const updatedMovieId = await moviesService.updateMovie({ movieId, movie })
+      res.status(200).json({
+        data: updatedMovieId,
+        message: 'movie updated'
+      })
+    } catch (error) {
+      next(error);
+    }
+  })
+
+  // delete
+  router.delete("/:movieId", async function (req, res, next) {
+    try {
+      const deleteMovieId = await Promise.resolve(moviesMock[0].id);
+      res.status(200).json({
+        data: deleteMovieId,
+        message: 'movies deleted'
+      })
+    } catch (error) {
+      next(error);
+    }
+  })
+
+}
+// Ahora tenemos que exportarla, porque aquí estamos definiendo la ruta pero no la estamos usando
+// en nuestra aplicación de express
+
+  module.exports = moviesApi;
+```
+
+## Creación de una BD en MongoAtlas
+
+En este modulo aprenderemos como podemos conectarnos a servicios externos en Express.js gracias a la arquitectura que implementamos donde tenemos nuestras rutas, nuestros servicios y librerías, podemos conectarnos a cualquier servicio o cualquier base de datos externa de una manera muy sencilla.
+
+En está ocación vamos a usar Mongo Atlas para conectarnos a una instancia de MongoDB, mongodb es un sistema de base de datos no relacional, los llamados NO-SQL _not only sql_.
+
+Para esta ocación vamos a hacer uso de nuestras variables de entorno, de está manera por cada enviroment, vamos a usar diferentes configuraciones, es decir en desarrollo vamos a conectarnos a una instancia o podríamos fácilmente conectarnos a una instancia local, en stagin el enviroment de pruebas o en producción deberíamos usar diferentes bases de datos.
+
+La uri de **mongodb** tiene está estructura.
+
+<div align="center">
+  <img src="./assets/uri-mongo.png" alt="uri-mongo">
+</div>
+
+Donde necesita el 
+- usuario de base de datos
+- el host
+- el nombre
+
+Todo esto lo vamos a representar en variables de entorno para que a la hora de cambiar de hambiente, sea muy fácil de remplazarlo, te voy a mostrar como podemos conectarnos en el código.
+
+1. Crear una cuenta en [Mongo Atlas](https://www.mongodb.com/cloud/atlas)
+2. Podemos hacer click en start free o try free, ambos nos llevan al mismo formulario para crear nuestra instancia gratuita
+3. Vamos a llenar el formulario con: email, nombre y apellido, para el password recomendamos un administrador de contraseñas y recomendamos [lastpast](https://www.lastpass.com)
+4. Nos pide aceptar terminos y condiciones
+5. Podemos elegir cualquier provedor entre: Amazon web services, google cloud o Azure
+6. En este caso eligiremos Amazon
+7. Despues nos inidica cuales de las regiones tienen la disponibilidad de crear una instancia gratuita, vamos a dejar la que tiene por defecto.
+8. Despues nos muestra una configuración que tiene por defecto y podemos simplemente darle en create cluster.
+
+Mientras que mongodb crea el cluster podemos revisar ciertas configuraciones como por ejemplo: el Network Access, Mongo Atlas limita el acceso a las bases de datos. Lo que se debe hacer cuando estemos en producción es determinar cual es la ip de la máquina que esta en producción para que solo esa IP tenga acceso a nuestra bases de datos, como en está ocación estamos hablando de desarrollo, nosotros vamos a permitir que cualquier IP se conecte a nuestra base de datos.
+
+Permitir que se conecte cualquier IP no es tan grave porque de todas maneras necesitamos el usuario y contraseña, pero es muy buena práctica restringir las conexiones por IP.
+
+Vamos a configurar el Network Access y vamos a indicarle que nos deje acceder desde cualquier parte, confirmamos y el crea el registro.
+
+Otra cosa que debemos hacer si nuestra base de datos ya está lista, es crear un usuario en Database Access, en está ocación vamos a elegir a un usuario que solo puede leer y escribir en nuestra base de datos
+
+Ejemplo de user:
+
+``db_user_platzivideos``
+
+``7Puyn0l6TnOw``
+
+Finalmente vamos a revizar si el cluster se está creando, normalmente toma un tiempo porque lo interesante de mongodb atlas a diferencia de otros servicios, es que el crea unas replicas, un cluster se compone de 3 instancias de mongodb, estó hace qu tengamos alta disponibilidad a diferencia de otros servicios, entonces vamos a esperar un momento a que termine de crear nuestra instancia de mongo.
+
+Una vez creada debemos tomar los datos de conexión, para esto le damos en connect en cualquiera de las opciones nos proporciona la uri que debemos usar, que es muy similar a la imagen que mostramos con aterioridad. Lo único que nos falta para complementar nuestra uri es la base de datos. 
+
+Para esto nos vamos a collecctions, en el nos dice las bases de datos que tenemos en esté caso son 0, y lo que le vamos a decir es **Add my own data**, en el podemos dar un nombre a la base de datos, en esté caso la vamos a llamar *platzivideos_db* y el nombre de la colleccion va a ser *Movies*, la creamos y estamos listos para poder ingresar nuestra uri en el código.
+
+## Conexión a MongoAtlas una instancia de MongoDB
+
+Ya que tenemos nuestra cuenta en mongodb atlas nos disponemos a crear la conexión en nuestra apliación.
+
+1. instalar el paquete ``npm i mongodb``
+2. Vamos a crear 2 archivos: ``.env.example`` y el archivo ``.env``
+
+El archivo .env.example es necesario para que cualquier otro desarrollador que tome nuestro proyecto sepa que variables de entorno debe alimentar localmente, mientras que el archivo .env van a ser las variables de entorno y va a ser alimentada por el archivo de configuración, esté nunca debe ser subido a base de datos, porque si no estamos exponiendo nuestras credenciales y cualquiera que tenga acceso al repositorio podría tomarlas, ya se han problemas por situaciones como está.
+
+```js
+# CONFIG
+PORT=3000
+CORS=*
+
+
+# MONGO
+DB_USER=
+DB_PASSWORD=
+DB_HOST=
+DB_NAME=
+```
+
+Ahora lo que hace falta es alimentar nuestro archivo de configuración con estás variables de entorno, lo que vamos a hacer es ir a nuestro archivo .env.example y copiar las variables de entorno, ir a nuestro archivo de configuración y agregarlas, las copiamos del env.examples para no borrar los valores y que fuera más sencillo.
+
+archivo de configuración:
+```js
+require('dotenv').config();
+
+const config = {
+  dev: process.env.NODE_ENV !== 'production',
+  port: process.env.PORT || 3000,
+  cors: process.env.CORS,
+  dbUser: process.env.DB_USER,
+  dbPassword: process.env.DB_PASSWORD,
+  dbHost: process.env.DB_HOST,
+  dbName: process.env.DB_NAME
+};
+
+module.exports = { config };
+```
+
+Ya nuestro archivo de configuración tiene estas nuevas variables de entorno, entonces lo que vamos a hacer así como hemos echo con nuestra capa de rutas y nuestra capa de servicios, es crear una capa de librerías, en esté caso crearemos una carpeta que se llamará **lib**
+
+En el lo que vamos a requerir es el cliente de mongo, eso lo hacemos ya con la **librería** que instalamos con anterioridad que es **mongodb** está librería es la oficial para conectarse a mongo, luego traemos nuestro archivo de configuración porque es desde ahí donde vamos a construir nuestra uri.
+
+```js
+const { MongoClient, ObjectId } = require('mongodb');
+const { config } = require('../config');
+
+// aquí vamos a crear las diferentes constantes
+// encodeURIComponent nos garantizá que si por alguna razón hay algunos caracteres especiales
+// no tengamos problemas a la hora de conectarnos.
+const USER = encodeURIComponent(config.dbUser);
+const PASSWORD = encodeURIComponent(config.dbPassword);
+const DB_NAME = config.dbName;
+
+// Ahora ya podemos comenzar a escribir nuestra uri de mongo
+const MONGO_URI = `mongodb+srv://${USER}:${PASSWORD}@${config.dbHost}:${config.dbPort}/${DB_NAME}?retryWrites=true&w=majority`;
+// mongodb+srv://db_user_platzivideos:<password>@cluster0-nnl4g.mongodb.net/test?retryWrites=true&w=majority
+class MongoLib {
+  constructor() {
+    this.client = new MongoClient(MONGO_URI, { useNewUrlParser: true });
+    this.dbName = DB_NAME;
+  }
+
+  connect() {
+    // Usamos patron Singleton: la idea es que cada vez que nos conectemos a nuestra base de datos
+    // no nos cree un nuevo cliente. Si no que si el cliente ya está y la conexión ya esta abierta, usemos esa misma conexión
+    if (!MongoLib.connection) {
+      MongoLib.connection = new Promise((resolve, reject) => {
+        this.client.connect(err => {
+          if (err) {
+            reject(err);
+          }
+
+          console.log('Connected succesfully to mongo');
+          resolve(this.client.db(this.dbName));
+        });
+      });
+    }
+
+    return MongoLib.connection;
+  }
+}
+```
+
+## Implementación de las acciones de MongoDB
+
+Las acciones son básicamente lo que es compatible con el CRUD:
+
+<div align="center">
+  <img src="./assets/mongodb.png" alt="crud mongo">
+</div>
+
+Documentación de mongo:
+
+- [Collection Methods](https://docs.mongodb.com/manual/reference/method/js-collection/)
+- [MongoDB CRUD operations](https://docs.mongodb.com/manual/crud/)
+- [Mongo introduction Book](https://github.com/uokesita/the-little-mongodb-book/blob/master/es/mongodb.markdown)
+
+Implementaremos nuestros las acciones con Mongo:
+
+```js
+class MongoLib {
+  constructor() {
+    this.client = new MongoClient(MONGO_URI, { useNewUrlParser: true });
+    this.dbName = DB_NAME;
+  }
+// Todos necesiatan retornas el método connect, y connect lo que nos retorna es una promesa
+  // nos devuelve una instancia a la base de datos y esa instancia de la bd tiene los métodos de mongo.
+  getAll(collection, query) {
+    return this.connect().then(db => {
+      return db
+        .collection(collection)
+        .find(query)
+        .toArray();
+    });
+  }
+  get(collection, id) {
+    return this.connect().then(db => {
+      return db.collection(collection).findOne({ _id: ObjectId(id) });
+    });
+  }
+  create(collection, data) {
+    return this.connect()
+      .then(db => {
+        return db.collection(collection).insertOne(data);
+      })
+      .then(result => result.insertedId);
+  }
+  updated(collection, id, data) {
+    return this.connect()
+      .then(db => {
+        return db
+          .collection(collection)
+          .updateOne({ _id: ObjectId(id) }, { $set: data }, { upsert: true });
+      })
+      .then(result => result.updsertdId || id);
+  }
+  delete(collection, id) {
+    return this.connect()
+      .then(db => db.collection(collection).deleteOne({ _id: ObjectId(id) }))
+      .then(() => id);
+  }
+}
+```
+
+Ya que hemos implementado nuestras acciones en la librería de mongo, en nuestra capa de servicios podemos remover los mocks, usar directamente está librería y así tener persistencia en la base de datos.
+
+## Conexión de nuestros servicios con MongoDB
+
+Ya que implementaste las acciones en la librería de mongo, nos vamos a disponer a coger la capa de servicios, remover los mocks e implementar esa librería y en está ocación ya tendremos persistencia de datos.
+
+```js
+const MongoLib = require('../lib/mongo');
+
+class MoviesService {
+  constructor() {
+    this.collection = 'movies';
+    this.mongoDB = new MongoLib();
+  }
+  async getMovies({ tags }) {
+    const query = tags && { tags: { $in: tags } };
+    const movies = await this.mongoDB.getAll(this.collection, query);
+    return movies || [];
+  }
+
+  async getMovie({ movieId }) {
+    const movie = await this.mongoDB.get(this.collection, movieId);
+    return movie || {};
+  }
+
+  async createMovie({ movie }) {
+    const createMovieId = await this.mongoDB.create(this.collection, movie)
+    return createMovieId || {};
+  }
+
+  async updateMovie({ movieId, movie } = {}) {
+    const updateMovie = await this.mongoDB.updated(this.collection, movieId, movie);
+    return updateMovie;
+  }
+
+  async deletedMovie({ movieId }) {
+    const deletedMovieId = await this.mongoDB.delete(this.collection, movieId);
+    return deletedMovieId;
+  }
+
+
+}
+
+module.exports = MoviesService;
+```
+
+Si vamos a crear un registro por medio de [postman]() cuando hacemos el send, vamos a tener un error y es porque el aún no saber como leer los datos que le estamos pasando, por defecto express necesita parcear estos datos JSON. La manera de corregirlo es agregando un Middleware desde el index.js
+
+```js
+const express = require('express');
+const app = express();
+
+const { config } = require('./config/index');
+const moviesApi = require('./routes/movies.js');
+
+// middleware de bodyparser
+app.use(express.json());
+moviesApi(app);
+
+// Cuando hagamos un request a nuestra aplicación, nos imprima un hello world
+app.get('/', (req, res) => {
+  res.send("Hello world");
+})
+
+app.get('/json', (req, res) => {
+  res.json({hello: 'world'});
+})
+
+app.listen(config.port, function () {
+  console.log(`Listening http://localhost:${config.port}`);
+})
+```
+
+Una vez funcionando nos damos cuenta que nuestro servicio está siendo persistente con la base de datos.
+
+
+## ¿Qué es un middleware?
+
+Un middleware es una pieza de software que está en medio de otras 2, se le suele describir como software glue, es decir pegamento de software y es porque nos ayuda a conectar otras piezas de software, pensemos por un momento en la población y en el agua, que es un recurso natural, si queremos que esté recurso natural llegue a la población deberíamos insertar en el medio en esté caso un middleware que sería un sistema de tuberias, el sistema de tuberías nos permite conectar el agua a la población, pero nosotros podemos seguir agregando middlewares, podemos agregar un middleware que se encargue de purificar el agua y luego podríamos poner otro middleware que se encargue de contar el consumo del agua.
+
+En express especificamente, la manera en como funcionan los middlewares es mediante la firma del: request-object, response-object y la funcionalidad next.
+
+<div align="center">
+ <img src="./assets/middleware.png" alt="middleware">
+</div>
+
+nosotros hemos visto algo muy similar en nuestro código: el req, res y la funcionalidad next, lo que nos permite es que en el middleware podemos hacer cualquier ejecución de código, podemos modificar el request-object, podemos modificar el response-object y la manera en como llamamos al siguiente middleware es a travez de la funcionalidad next, si por alguna razón le pasamos un párametro a la funcionalidad next, se ejecutan los middlewares de error.
+
+Nosotros lo que vamos a hacer como ejemolo del mundo real es, crear toda una capa de manejo de errores de un middleware, pero los middleware en next del formato err, tienen una firma diferente, y es que en vez de recibir los 3 páramtros, van a recibir un cuarto párametro que va a ser el error, de está manera podemos maniuplar el error y decir como lo imprimimos y llamar el next con un error o no para saber si llamamos nuestro siguiente middleware de manejo de error, te voy a enseñar como puedes hacerlo en tu código:
+
+1. En nuestra carpeta de utilidades vamos a crear una nueva carpeta que se llamará middleware.
+2. Creamos un archivo llamado errorHandlers.js
+3. Vamos a traer nuestro archivo de configuración porque dependiendo si estamos en modo desarrollo o modo producción, quiero que el error que nos imprima incluya el stack del error o no, recuerda que el stack es toda la configuración relaciona al error.
+4. Crearemos una funcion que va a ser nuestro middleware que se encargará de imprimir nuestros errores, el cual recibe: **err, req, res, next**
+5. El otro middleware que vamos a crear es que nos va a ayudar a darle manejo al error, por defecto express, como imprime los errores es en formato html, como nosotros estamos implementando una api lo más necesario es que sean en formato JSON.
+6. Para poder determinar si agregamos el stack o no es crear otra función de ayuda, esto no es un middleware que se llamará *withErrorStack*, en ella vamos a recibir: **err, stack** 
+
+```js
+const { config } = require('../../config/index');
+
+function withErroStack(err, stack) {
+  if (config.dev) {
+    return {
+      err,
+      stack
+    };
+  }
+  return err;
+}
+
+function logErrors(err, req, res, next) {
+  console.log(err);
+  next(err);
+}
+
+function errorHandler(err, req, res, next) { // eslint-disable-line
+  res.status(err.status || 500);
+  res.json(withErroStack(err.message, err.stack));
+}
+
+module.exports = {
+  logErrors,
+  errorHandler
+};
+```
+
+Ahora vamos a ir a nuestro index y así como agregamos nuestro middleware del bodyParser, podemos agregar los otros middlewares.
+
+```js
+const express = require('express');
+const app = express();
+
+const { config } = require('./config/index');
+const moviesApi = require('./routes/movies.js');
+
+const { logErrors, errorHandler } = require('./utils/middleware/errorHandlers')
+
+// middleware de bodyparser
+app.use(express.json());
+
+moviesApi(app);
+
+// Los middlewares de error, siempre tienen que ir al final de las rutas, 
+// las rutas también son middlewares
+app.use(logErrors);
+app.use(errorHandler);
+
+
+// Cuando hagamos un request a nuestra aplicación, nos imprima un hello world
+app.get('/', (req, res) => {
+  res.send("Hello world");
+})
+
+app.get('/json', (req, res) => {
+  res.json({hello: 'world'});
+})
+
+app.listen(config.port, function () {
+  console.log(`Listening http://localhost:${config.port}`);
+})
+```
+
+De está manera podemos implementar una capa del manejo de errores usando un middleware en express, a continuación dejaremos una lectura de las capas de manejo de errores, en ella no solo sabrás como implementar la capa de manejo de errores para código asincrono, sino también para código sincrono.
+
+## Manejor de erroes asíncronos y síncronos en Express
+
+El manejo de errores en Express es el proceso de capturar un error de manera asíncrona como síncrona . Por defecto Express viene con un manejador de errores por defecto, así que no es necesario escribir uno para empezar a usarlo.
+
+Los errores que ocurren de manera síncrona dentro un manejador de rutas o un middleware no requieren trabajo extra. Si un código síncrono lanza un error Express automáticamente capturará el error. Por ejemplo:
+
+```js
+app.get("/", function(req, res) {
+  throw new Error("BROKEN"); // Express capturara este error por sí solo.
+});
+```
+Para errores que se retornan desde funciones asíncronas invocadas desde un manejador de ruta o un middleware, es necesario pasar el error como argumento a la función next(), de esta manera Express capturará el error y lo procesará. Por ejemplo:
+
+```js
+app.get("/", function(req, res, next) {
+  fs.readFile("/file-does-not-exist", function(err, data) {
+    if (err) {
+      next(err); // Se debe pasar el error a Express.
+    } else {
+      res.send(data);
+    }
+  });
+});
+```
+Es responsabilidad de nosotros capturar errores que puedan ocurrir en código asíncrono invocado desde un manejador de ruta o middleware para que Express lo procese. Por ejemplo:
+
+```js
+app.get("/", function(req, res, next) {
+  setTimeout(function() {
+    try {
+      throw new Error("BROKEN");
+    } catch (err) {
+      next(err);
+    }
+  }, 100);
+});
+```
+El ejemplo de arriba usa un bloque ``try...catch`` para capturar los errores en el código asíncrono y pasarlo a Express. Si el bloque ``try...catch`` fuese omitido, Express no podría capturar el error debido a que no es parte de un manejador síncrono de código.
+
+Cuando se usan funciones que retornan promesas, puedes simplemente proveer la funcionalidad next al final del manejador catch de la promesa y Express automáticamente capturará el error. Por ejemplo:
+
+```js
+app.get("/", function(req, res, next) {
+  Promise.resolve()
+    .then(function() {
+      throw new Error("BROKEN");
+    })
+    .catch(next); // Errores serán pasados a Express.
+});
+```
+
 
 
 

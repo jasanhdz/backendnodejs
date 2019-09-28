@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "DEBUG=app* nodemon index",
-    "start": "NODE_ENV=prducction node index"
+    "start": "NODE_ENV=production node index"
   },
   "keywords": [
     "backend",
