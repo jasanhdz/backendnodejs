@@ -1766,9 +1766,219 @@ app.get("/", function(req, res, next) {
 });
 ```
 
+## Capa de validación de datos a travéz de un middleware
 
+La capa de validación es necesaria porque cuando estamos consumiendo nuestros endpoints, los endpoints no saben que datos le estamos enviando, si estamos enviando en el caso de una pelicula con titulo o sin titulo, o a la hora de recibir las peliculas el formato del id es correcto, entonces mediante esta middleware podemos validar o podemos especificar unos schemas, de tal manera que podemos especificar que: la pelicula sea de tipo string, queremos que la numeración sea de tipo número, etc. De está manera si por alguna razón el cliente o el usuario ingrese los datos que no son, podemos especificar un error mostrando que partes son requeridas o que partes no tienen el formato, estó le va ha ayudar al cliente o al usuario a que se de cuenta como debe consumir nuestras API.
 
+Para ello vamos a crear una funcionalidad que se va a llamar validationHandler, está funcionalidad va a recibir un schema, el esquema va a determinar cúal es el formato del esquema que vamos a enviar, como segundo párametro le vamos a informar donde queremos checar este esquema, por defecto vamos a checar el body del request, pero también podríamos checar los párametros o el query, etc. 
+Cuando tenemos estos datos en la función retornamos una función que tiene la firma de un middleware, cogemos una utilidad que vamos a llamar validate, en esté caso le vamos a pasar en el req**[check]** checando el body, y le vamos a pasar un schema y esto puede que devuelva o no un error de validación, si devuelve un error, lo que vamos a hacer es llamar a nuestra funcionalidad next con el error. Acuerdence que cuando llamos a nuestra funcionalidad next con un párametro, en esté caso el error, van a empezar a ejecutarse los middlewares de error, si no simplemente llamos a nuestra funcionalidad next y como no le estamos pasando ningun párametro va a llamar al siguiente middleware 
 
+<div align="center">
+  <img src="./assets/validationHandler.png" alt="validationHandler">
+</div>
+
+## ¿Qué es Join y Boom?
+
+Join y Boom son tecnologías del ecositema de hapijs pero son tan buenas, que las vamos a integrar como middleware en nuestra aplicación de express.
+
+Join: Object schema validation, es la librería que nos va a ayudar a validar los schemas.
+Boom: HTPP-friendly error objects. Es un manjeador de errores de una manera mucho más comprensible.
+
+La mejor manera de entenderlos es visitando su documentación oficial.
+
+- [Join](https://hapi.dev/family/joi/)
+- [Boom](https://hapi.dev/family/boom/?v=8.0.1)
+
+## Implementando Boom 
+
+En esta sección aprenderemos a como podemos implementar Boom en nuestro código de express. Lo que haremos será usar boom en nuetros errorsHandlers que definimos con anterioridad, también aprovecharemos para crear nuestro error 404 de tal manera que cuando hagan un request a un endpoint que no existe, respondamos correctamente, te mostraré como hacerlo en el codigó.
+
+1. primero necesitamos instalar Boom ``npm i @hapi/boom``
+2. Nos diponemos a ir a nuestro middleware manejador de errores, en el vamos a incluir la dependecia de boom. 
+```js
+const boom = require('@hapi/boom');
+```
+3. Como ya nos va a llegar un error boom, vamos a hacer un sprint-operator al error porque ahora el error no solo trae el mensaje, si no que trae unas propiedades como vimos, el **error, statusCode y message**, entonces es necesario hacer esté pequeño cambio 
+4. Crearemos un tercer middleware que se llamará **wrapErrors()** porque es posible que en algún punto el error que nos llegué no sea de tipo boom y nosotros queremos que apartir de ahí todos los errores tengan la estructura boom.
+```js
+function wrapErrors(err, req, res, next) {
+  // Es posible que el error que nos llegue no sea de tipo Boom,
+  // nosotros queremos que apartir de ahi todos los errores tengan la estructura boom
+  if (!err.isBoom) {
+    next(boom.badImplementation(err));
+  }
+  // Si el error que estamos pasando por acá es de tipo boom, 
+  // llamamos al siguiente middleware con el error
+  next(err);
+}
+```
+5. Ahora apartir del error que ya va a ser de tipo boom, debemos sacar el outpu:
+```js
+function errorHandler(err, req, res, next) { // eslint-disable-line
+  // Apartir del error que ya va ha ser de tipo boom debemos sacar el output, 
+  // es la manera como le da menejo boom y ahoi podemos sacar el status code del error y el payload
+  const { output: { statusCode, payload } } = err;
+  // ahora no necesitamos manejar error.status, sino simplemente statusCode
+  res.status(statusCode);
+  // acá en lugar de pasar el error message pasamos el payload  
+  res.json(withErroStack(payload, err.stack));
+}
+```
+6. Ahora tenemos que exportar wrapErrors
+7. Ahora lo que debemos hacer es actualizar nuestro archivo index el middleware, en esté caso lo que debemos hacer es ponerlo antes errorHandler.
+8. Otra cosa que debemos hacer es ir al validationHandler y donde estabamos devolviendo un error, es devolver un error de Boom
+```js
+// Para devolver un error de Boom, requerimos boom
+const boom = require('@hapi/boom');
+/*
+....
+*/
+function validationHandler(schema, check = "body") {
+  return function (req, res, next) {
+    const error = validate(req[check], schema);
+    // Estó nos va a devolver un error de que los datos no son validos
+    error ? next(boom.badRequest(error)) : next();
+  }
+}
+```
+
+También vamos a crear un middleware para menejar los erroes 404, el cual vamos a llamar notFoundHandler.
+
+```js
+const boom = require('@hapi/boom');
+
+function notFoundHandler(req, res) { // eslint-disable-line
+  const { output: { statusCode, payload } } = boom.notFound();
+
+  res.status(statusCode).json(payload);
+}
+```
+Está función es un middleware pero no recibe el next, porque para que pueda funcionar, lo más importante es que estó debe ir al final de las rutas, el notFound lo que hace es que se ejecuta cuando ya paso por todas las rutas
+
+Ahora solo lo requerimos en nuestro archivo index y lo agregamos al final de las rutas.
+
+```js
+// routes
+moviesApi(app);
+
+// Catch 404
+app.use(notFoundHandler);
+```
+
+Ahora si intentamos hacer una llamada con una ruta inexistente nos marcará el error 404 de Boom.
+
+## Implementando Joi
+
+En esté modulo vamos a implementar joi con nuestra capa de validación de datos.
+
+1. Necesitamos instalar joi como una dependencia ``npm i @hapi/joi``
+2. Vamos a ir a nuestro middleware de validationHandler.
+3. Vamos a requerir joi. Recuerdan que teniamos la funcionalidad validate retornando false, ahora la vamos a implementar.
+```js
+const joi = require('@hapi/joi');
+
+//* validate va a recibir la data que va a validar, y va a recibir un schema
+function validate(data, schema) {
+  // vamos a obtener un error en caso de que el schema no sea valido con la data
+  // ANTIGUA IMPLEMENTACIÓN DE JOIN
+  // const { error } = joi.validate(data, schema);
+
+  // NUEVA IMPLEMENTACIÓN DE JOI ahora el schema valida la data
+  const { error } = schema.validate(data, { errors: { stack: true } });
+  return error;
+}
+```
+4. Ahora lo que debemos de hacer es crear el schema para nuestros datos, en esté caso vamos a crear un schema que valide la estrucutura de nuestras peliculas, como recuerdan en nuestro mock teniamos una serie de atributos, como el titulo, año, cover, etc. Entonces lo que debemos de hacer es crear un schema que por ejemplo: 
+  - A la hora de escribir un string tenga cierto tamaño o cierto minimo de tamaño y lo mismo para el resto de atributos.
+  - Si vamos a ocupar en la duration numeros, tenemos que asegurarnos que sean números.
+  - Si vamos usar una url debemos asegurarnos que sea una url.
+5. Para ello en nuestras utilidades vamos a crear una nueva carpeta que se a llamar schemas, para guardar nuestros esquemas.
+
+```js
+const joi = require('@hapi/joi');
+
+// llamamos join.string para indicar que es un string
+/**
+ * llamamos regex porque los ids de mongodb tienen cierta estructura y es una muy buena
+ * forma de validarlo mediante un regex, porque son una collection de caracteres alphanumericos
+ * que tienen un minimo de 24 caracteres.
+ * 
+ * /^[0-9]: inicia con cualquiera de los caracteres alphanumericos del 0 al 9
+ * /^[0-9a-fA-F]: de la a minuscula a la f minuscula, y de la A mayuscula a la F mayúscula
+ * /^[0-9a-fA-F]{24}$/: puede tener un tamaño de 24 y así es com debe terminar.
+ */
+
+const movieIdSchema = joi.string().regex(/^[0-9a-fA-F]{24}$/);
+const movieTitleSchema = joi.string().max(80);
+const movieYeartSchema = joi.number().min(1888).max(2077);
+const movieCoverSchema = joi.string().uri();
+const movieDescriptionSchema = joi.string().max(300);
+const movieDurationSchema = joi.number().min(1).max(300);
+const movieContentRatingSchema = joi.string().max(5);
+const movieSourceSchema = joi.string().uri();
+const movieTagsSchema = joi.array().items(joi.string().max(50))
+
+const createMovieSchema = {
+  title: movieTitleSchema.required(),
+  year: movieYeartSchema.required(),
+  cover: movieCoverSchema.required(),
+  description: movieDescriptionSchema.required(),
+  duration: movieDurationSchema.required(),
+  contentRating: movieContentRatingSchema.required(),
+  source: movieSourceSchema.required(),
+  tags: movieTagsSchema
+};
+
+// Solo vamos a actualizar una parte de la pelicula
+const updateMovieSchema = {
+  title: movieTitleSchema,
+  year: movieYeartSchema,
+  cover: movieCoverSchema,
+  description: movieDescriptionSchema,
+  duration: movieDurationSchema,
+  contentRating: movieContentRatingSchema,
+  source: movieSourceSchema,
+  tags: movieTagsSchema
+}
+
+module.exports = {
+  movieIdSchema,
+  createMovieSchema,
+  updateMovieSchema
+}
+```
+
+Ahora lo que debemos hacer es aplicar estos esquemas en nuestras rutas, para ello debemos ir a nuestras routes movies, y lo primero que debemos hacer es importar los schemas.
+
+Inicialmente para el GET no le vamos a aplicar ninguna regla de validation, pero para el GET cuando recibe un id, es decir el especifico si lo vamos a hacer, primero traer nuestro validationHandler el cual también debemos de requerir.
+
+Recuerden que nuestro validationHandler va a recibir un schema y también va a recibir de donde va a sacar los datos, por defecto va a sacarlo del body, pero en el caso del getMovieId lo vamos a sacar de los parametros porque el id viene de los parametros.
+
+```js
+ router.get("/:movieId", validationHandler(joi.object({ movieId: movieIdSchema }), 'params'), async function (req, res, next) { 
+  //  .......
+ }
+```
+
+Muy similar va ha ser para el post, el post en esté caso en vez de usar los parametros en esté caso va ha sacar del body, y va a sacar el *createMovieSchema* fijense que el middleware lo vamos a poner entre la ruta y entre la definición de la ruta y así mismo nosotros podemos poner varios middleware como es el caso del PUT.
+
+```js
+ // create
+  router.post("/", validationHandler(joi.Object(createMovieSchema)), async function (req, res, next) {
+    // ....
+  }
+```
+
+Porque el PUT no solo recibe el párametro si no que también recibe el cuerpo, primero podría validar el cuerpo y segundo podría validar el id, pero primero validaremos el id, aunque cualquiera de los 2 funciona en esté caso, que debería de venir en los párametros id y en el body debería venir la pelicula, en esté caso no es createMovie, sino seria updatedMovie.
+
+```js
+// PUT - actualizar
+  router.put("/:movieId", validationHandler(joi.Object({ movieId: movieIdSchema }), 'params'), validationHandler(updateMovieSchema) ,async function (req, res, next) {
+    // ....
+  }
+```
+
+ 
 
 
 
