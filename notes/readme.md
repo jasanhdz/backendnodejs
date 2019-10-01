@@ -1,54 +1,77 @@
-# Node
+<div align="center">
+  <h1>Backend con Node.js</h1>
+</div>
+
+## Tabla de contenido
+- [¿Qué es Node.js y para que sirve?](#qué-es-nodejs-y-para-que-sirve)
 
 ## ¿Qué es Node.js y para que sirve?
 
-La definición formal de nodejs es: un entorno de ejecución para javascript construido con el motor v8.
-**El entorno de ejecucíon:** es la capa que corre por el sistema operativo que ejecuta software, básicamente se ecnarga de como se consume memoria, como acceder a las variables y como corre el [garbage collector](https://es.wikipedia.org/wiki/Recolector_de_basura).
+La definición formal de **nodejs es:** _un entorno de ejecución para javascript construido con el motor v8._
 
-[V8]() Es un engine de Javascript por de chromiund-project para chrome y chromium. Además de chrome existen 2 proyectos que son chromium que es la versión open source y luego chrome canary, chrome canary se llamá así por una analogía donde antiguamente los mineros iban a la mina y para detectar si habia gases o algún peligro, ponían a un canario en una pequeña jaula, si había un gas y pasaba algo, el canario lasimosamente moría y es la manera en como se daban cuenta si había algún error, lo mismo pasa con chrome canary, es la manera como detectan errores y si todo sale bien, lo pasan a chrome.
+**El entorno de ejecucíon:** es la capa que corre por el sistema operativo que ejecuta software, básicamente se encarga de como se consume memoria, como acceder a las variables y como corre el [garbage collector](https://es.wikipedia.org/wiki/Recolector_de_basura).
 
-Chrome V8 lo que hace es compilar javascript a código máquina. Recordemos que los lenguajes interpretados se ejecutan muy rápido, pero cuando hay un loop de código muy seguido se demoran, porque cada vez que pasan por esa linea de código tienen que volverla a interpretar a diferencia de los lenguajes compilados que se demoran mucho en cargar, porque tienen que pasar precismanete por ese proceso de compilación, luego se ejecutan muy rápido porque compilan esa linea, por eso cada vez que vuelven a pasar por ese loop, ya esta perfectamente compilado.
+[Chrome V8](https://es.wikipedia.org/wiki/Chrome_V8) Es un engine de Javascript por de **chromiund-project** para chrome y chromium. Además de chrome existen **2 proyectos** que son **chromium** que es la versión open source y luego **chrome canary**, chrome canary se llamá así por una analogía donde antiguamente los mineros iban a la mina y para detectar si habia gases o algún peligro, ponían a un canario en una pequeña jaula, si había un gas y pasaba algo, el canario lasimosamente moría y es la manera en como se daban cuenta si había algún error, lo mismo pasa con chrome canary, es la manera como detectan errores y si todo sale bien, lo pasan a chrome.
 
-Javascript solía ser interpretado y ahora es compilado con una tecnologia llamada **Just in time compiler** ó [compilación en tiempo de ejecución](https://es.wikipedia.org/wiki/Compilaci%C3%B3n_en_tiempo_de_ejecuci%C3%B3n), está tecnología lo que tiene es un monitor que se encarga de revizar cada cuanto se ejecuta nuestro código, si el código se ejecuta mucho pone un estado warm y lo que hace es que ese código lo compila, si ese código compilado se ejecuta muchas veces, lo coloca en un estado HOT y es básicamente es hacerle una optimización a ese compilado, para que cuando se llame, ya llame a la versión optimizada.
+[Chrome V8](https://es.wikipedia.org/wiki/Chrome_V8) lo que hace es compilar javascript a código máquina. Recordemos que los lenguajes interpretados se ejecutan muy rápido, pero cuando hay un loop de código muy seguido se demoran, porque cada vez que pasan por esa linea de código tienen que volverla a interpretar a diferencia de los lenguajes compilados que se demoran mucho en cargar, porque tienen que pasar precisamente por ese proceso de compilación, luego se ejecutan muy rápido porque compilan esa linea, por eso cada vez que vuelven a pasar por ese loop, ya esta perfectamente compilado.
 
-Nodejs fue tomar el engine de JS chrome V8 para crear un entorno de ejecución y poder usar javascript del lado del servidor, recordemos que tenemos otros engine de JS como: [spiderMonkey]() [JavascriptCore]() [Chakra](). Pero como recientemente van a renovar la versión de Each van a empezar a implementar el motor V8 como Js engine.
+__Javascript solía ser interpretado__ y **ahora es compilado** con una tecnologia llamada **Just in time compiler** ó [compilación en tiempo de ejecución](https://es.wikipedia.org/wiki/Compilaci%C3%B3n_en_tiempo_de_ejecuci%C3%B3n), está tecnología lo que tiene es un monitor que se encarga de revizar cada cuanto se ejecuta nuestro código, si el código se ejecuta mucho pone un estado warm y lo que hace es que ese código lo compila, si ese código compilado se **ejecuta muchas veces**, lo coloca en un estado **HOT** y es básicamente es hacerle una **optimización** a ese compilado, para que cuando se llame, ya llame a la versión optimizada.
+
+Nodejs fue tomar el engine de JS chrome V8 para crear un entorno de ejecución y poder usar javascript del lado del servidor, recordemos que tenemos otros engine de JS como: [spiderMonkey](https://es.wikipedia.org/wiki/SpiderMonkey), [JavascriptCore](https://es.wikipedia.org/wiki/JavaScriptCore) y [Chakra](https://es.wikipedia.org/wiki/Chakra_(int%C3%A9rprete_de_JScript)). Pero como recientemente van a renovar la versión de Each van a empezar a implementar el motor V8 como Js engine.
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Fechas importantes de NodeJS
 
-En 2009 por primera vez [Ryan Dahl](https://en.wikipedia.org/wiki/Ryan_Dahl) mostró al mundo nodejs.
-En 2011 por primera vez Linkenlin usa nodejs en producción.
-En 2013 se saca Gust que es una Plataforma de plugin.
-A la vez Paypal saca un framework de nodejs llamado [Krakenjs](https://github.com/krakenjs/kraken-js)
-En 2015 sale la competencia de nodejs llamada IOJS, pero afortunadamente se reconcilian y crean lo que hoy es [La Nodejs foundation](https://foundation.nodejs.org/).
-En 2017 Nodejs Se vuelve Messing con un 8.8 millones de instancias funcionando.
+- En **2009** por primera vez [Ryan Dahl](https://en.wikipedia.org/wiki/Ryan_Dahl) mostró al mundo nodejs.
+
+- En **2011** por primera vez Linkenlin usa  nodejs en producción.
+
+- En **2013** se saca Gust que es una Plataforma de plugin.
+
+- A la vez Paypal saca un framework de nodejs llamado [Krakenjs](https://github.com/krakenjs/kraken-js).
+
+- En **2015** sale la competencia de nodejs llamada IOJS, pero afortunadamente se reconcilian y crean lo que hoy es [La Nodejs foundation](https://foundation.nodejs.org/).
+
+- En **2017** Nodejs Se vuelve Messing con un 8.8 millones de instancias funcionando.
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Diferencias entre NodeJs y Javascript
 
-En Javascript tenemos el [DOM document object model]() es la interfaz que nos permite interpretar el documento html en javascript como lo es el objeto window, también tenemos el [CSSDOM]() que es la interfaz que nos permite manipular el css en javascript, por otro lado tenemos el [FetchAPI]() que por el cual podemos hacer request y que nos devuelva una promesa, también tenemos toda la capa de webstorage que consiste en el [sessionStorage] y el [localStorage] que eso no existe en nodejs, tenemos el modulo de canvas API que nos permite hacer gráficos en la web en 2D y 3D y apartir de ahi tenemos una seríe de APIS como lo son: el BluttudAPI, AudioAPI, webAutenthicationAPI.
+En Javascript tenemos el [DOM document object model]() es la interfaz que nos permite interpretar el documento html en javascript como lo es el objeto window, también tenemos el [CSSDOM]() que es la interfaz que nos permite **manipular el css** en javascript, por otro lado tenemos el [FetchAPI](https://developer.mozilla.org/es/docs/Web/API/Fetch_API) que por el cual podemos hacer **request** y que nos devuelva una promesa, también tenemos toda la capa de [webstorage](https://www.w3schools.com/html/html5_webstorage.asp) que consiste en el [sessionStorage](https://developer.mozilla.org/es/docs/Web/API/Window/sessionStorage) y el [localStorage](https://developer.mozilla.org/es/docs/Web/API/Window/localStorage) que eso no existe en nodejs, tenemos el modulo de [canvas API](https://developer.mozilla.org/es/docs/Web/HTML/Canvas) que nos permite hacer gráficos en la web en 2D y 3D y apartir de ahi tenemos una seríe de APIS como lo son: el [Web Bluetooth AP](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API), [AudioAPI](https://developer.mozilla.org/es/docs/Web_Audio_API) y [webAutenthicationAPI](https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API).
 
 Por otro lado en Nodejs tenemos una serie de modulos:
-- Http: permite crear servidores 
-- Sistema operativo: nos permite comunicarnos entre el sistema operativo y darnos información sobre el.
-- Utilidades: que son una serie de utilidades excusivas para nodejs
-- Debugger: una manera en la que podemos hacer debuggin con nodejs.
-- Streams: nos permiten manejar grandes colecciones de datos-
-- Eventos: podemos definir acciones y disparar más adelante 
-- Ecmascript Modules: se pueden ejecutar en nodejs mediante un feature flag
-- Consola: es muy similar a la del navegador
+- **Http**: permite crear servidores 
+- **Sistema operativo**: nos permite comunicarnos entre el sistema operativo y darnos información sobre el.
+- **Utilidades**: que son una serie de utilidades excusivas para nodejs
+- **Debugger**: una manera en la que podemos hacer debuggin con nodejs.
+- **Streams**: nos permiten manejar grandes colecciones de datos-
+- **Eventos**: podemos definir acciones y dispararlas más adelantel. 
+- **Ecmascript Modules**: se pueden ejecutar en nodejs mediante un feature *flag*
+- **Consola**: es muy similar a la del navegador.
 
 ## Instalación de Node.js
 
-Para instalar Node.js tienes que dirigirte [a](https://nodejs.org/es/) y elegir entre la ultima versión o la version LTS.
+Para instalar Node.js tienes que dirigirte a [nodejs.org](https://nodejs.org/es/) y elegir entre la ultima versión o la version LTS.
 
 Por defecto Node.js detecta tu sistema operativo y descarga el archivo indicado para la instalación, si no es tu caso puedes dirigirte al enlace de otras [descargas](https://nodejs.org/es/download/.)
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Arquitectura orientada a eventos
 
 Uno de los paradigmas de programación en nodejs más populares es la arquitectura orientada a eventos, los eventos nos permiten manipular el código asincrono de una mejor manera. Respasemos algunos ejemplos de callback
 
-Concepto Error First Callback: cuando un callback tiene un error lo que vamos a enviar como primer párametro es el error.
+Concepto **Error First Callback**: _cuando un callback tiene un error lo que vamos a enviar como primer párametro es el error_.
 
-Usando Callback
+Usando **Callback**
 ```js
 const asyncCallback = function (cb) {
   setTimeout(() => {
@@ -71,7 +94,7 @@ asyncCallback((err, msg) => {
 })
 ```
 
-Usando Promesas:
+Usando **Promesas**:
 ```js
 // resolve: se encarga de resolver la promesa
 // reject: se encarga de enviar un error en caso de que algo suceda
@@ -96,9 +119,9 @@ promise.then(msg => msg.toUpperCase())
   .catch(err => console.log('Error', err));
 ```
 
-Aún hay una mejor manera de hacer estó, lo importante de las promesas es que esto se empieza a generar un código en cascada que es dificil de leer con el tiempo, ahora recientemente se puede usar **async await** que es una manera de escribir código asincrono que se vea sincrono.
+Aún hay una mejor manera de hacer estó, lo importante de las promesas es que esto se empieza a generar un código en cascada que es dificil de leer con el tiempo, ahora recientemente se puede usar [async await](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Operadores/await) que es una manera de escribir código asincrono que se vea sincrono.
 
-Lo que requiere async await es que nuestra función devuelva una promesa, que es como una serie de wrapper que hacemos, en esté caso nosotros vamos a convertir esa promesa en una función:
+Lo que requiere [async await](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Operadores/await) es que nuestra función devuelva una promesa, que es como una serie de **wrapper** que hacemos, en esté caso nosotros vamos a convertir esa promesa en una función:
 
 ```js
 const promiseFunction = () => new Promise((resolve, reject) => {
@@ -122,10 +145,14 @@ async function asyncAwait() {
 
 asyncAwait();
 ```
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Event Emiter
 
-Hay una forma aún más poderosa de ejecutar el código anterior y es con la clase event-emitter. EventEmitter no es exclusivo, podemos usar promesas y código asincrono, pero ya vamos a ver cuales son sus ventajas:
+Hay una forma aún más poderosa de ejecutar el código anterior y es con la clase event-emitter. [EventEmitter](https://nodejs.org/dist/latest-v10.x/docs/api/events.html#events_class_eventemitter) no es exclusivo, podemos usar promesas y código asincrono, pero ya vamos a ver cuales son sus ventajas:
 
 ```js
 // Creamos un Event Emitter
@@ -166,6 +193,11 @@ porque queda de manera asincrona.
 logger.execute(() => setTimeout(() => console.log("Hello World"), 500));
 ```
 
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Primer Servidor
 
 En esta ocación tenemos que leer codígo e interpratar lo que se esta haciendo:
@@ -188,7 +220,7 @@ server.listen(9000);
 console.log('Servidor en la url http://localhost:9000');
 ```
 
-Segundo Servidor que usa el evento POST para recibir datos e imprimirlos tal cúal:
+Segundo Servidor que usa el evento **POST** para recibir datos e imprimirlos tal cúal:
 
 ```js
 const http = require('http');
@@ -226,7 +258,7 @@ server.listen(9001);
 console.log('Servidor en la url http://localhost:9001'); 
 ```
 
-Servidor que recibe tu fecha de cunpleaños y devuelve el dia de la semana que nacieron:
+**Servidor que recibe tu fecha de cunpleaños y devuelve el dia de la semana que nacieron**:
 
 ```js
 const http = require('http');
@@ -268,42 +300,50 @@ server.on('request', (req, res) => {
 server.listen(8000);
 console.log('Servidor en la url http://localhost:8000'); 
 ```
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Sreams 
 
-Introducción:
+**Introducción**:
 
-Es una colección de datos tal como lo son los array y las cadenas de texto, solo que en vez, solo que en lugar de estar en su totalidad, se van manejando pedazo por pedazo, esto hace que los streams sean verdaderamente poderosos, porque podemos manejar gran cantidad de datos.
+Es una colección de datos tal como lo son los arrays y las cadenas de texto, solo que en lugar de estar en su totalidad, se van manejando pedazo por pedazo, esto hace que los streams sean verdaderamente poderosos, porque podemos manejar grandes cantidades de datos.
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Readable y Writable Streams
 
-Los readable streams y writable streams tienen eventos y funciones, tienen eventos porque como bien sabemos heredan de la clase event emitter.
+Los readable streams y writable **streams** **tienen eventos y funciones**, tienen eventos **porque** como bien sabemos **heredan de la clase event emitter**.
 
-Readable
+**Readable**
 Eventos más comunes
-- data: Se dispara cuando recibe datos.
-- end. Se dispara cuando termina de recibir datos.
-- error. Se dispara cuando hay un error.
+- **data**: Se dispara cuando recibe datos.
+- **end**: Se dispara cuando termina de recibir datos.
+- **error**: Se dispara cuando hay un error.
 
 Las funciones más comunes son:
-- pipe
-- unpipe
-- read
-- push
+- **pipe**
+- **unpipe**
+- **read**
+- **push**
 
-Writable 
+**Writable** 
 Eventos más comunes:
-- drain. Se dispara cuando emite datos.
-- finish. Se dispara cuando termina de emitir.
-- error. Se dispara cuando hay un error.
+- **drain**: Se dispara cuando emite datos.
+- **finish**: Se dispara cuando termina de emitir.
+- **error**: Se dispara cuando hay un error.
 
 Las funciones más comunes son:
-- write
-- end
+- **write**
+- **end**
 
-Recuerda que tienen estos eventos porque los heredan de la clase **EventEmitter**.
+**Recuerda** que tienen estos eventos porque los heredan de la clase **EventEmitter**.
 
-Writable straeams
+**Writable** streams
 
 ```js
 const { Writable } = require('stream');
@@ -318,7 +358,7 @@ const writableStream = new Writable({
 process.stdin.pipe(writableStream);
 ```
 
-Readable streams
+**Readable** streams
 ```js
 const { Readable } = require('stream');
 const readableStream = new Readable();
@@ -329,7 +369,7 @@ readableStream.push(null);
 readableStream.pipe(process.stdout)
 ```
 
-Readable streams on demand
+**Readable streams on demand**
 ```js
 const { Readable } = require('stream');
 const readableStream = new Readable({
@@ -347,15 +387,20 @@ const readableStream = new Readable({
 readableStream.currentCharCode = 65; 
 readableStream.pipe(process.stdout)
 ```
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Duplex y Transforms streams
-
+<p style="text-decoration:underline; font-weight:bold; ">
 Ambos sirven para simplificar nuestro código:
+</p>
 
-- Duplex: implementa los métodos write y read a la vez.
-- Transform: es similar a Duplex pero con una sintaxis más corta.
+- **Duplex**: implementa los métodos **write** y **read** a la vez.
+- **Transform**: es **similar** a Duplex pero con una **sintaxis** más **corta**.
 
-Duplex
+**Duplex**
 ```js
 const { Duplex } = require('stream');
 
@@ -380,7 +425,7 @@ duplexStream.currentCharCode = 65;
 process.stdin.pipe(duplexStream).pipe(process.stdout);
 ```
 
-Transform
+**Transform**
 ```js
 const { Transform } = require('stream');
 
@@ -407,12 +452,14 @@ const transformStreamCamelCase = new Transform({
 
 process.stdin.pipe(transformStreamCamelCase).pipe(process.stdout);
 ```
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Uso de utilidades que tiene NodeJS
 
-## Sistema operativo y sistemas de archivos
-
-Utilidades del sistema operativo
+### Utilidades del sistema operativo
 
 ```js
 const os = require('os');
@@ -435,11 +482,11 @@ console.log("SO version", os.release());
 console.log("Usr info", os.userInfo());
 ```
 
-Utilidades con el sistema de archivos
+### Utilidades con el sistema de archivos
 
-En node las utilidades la mayoria pueden funcionar de manera sincrona y asincrona, de manera sincrona, quiere decir que el va a esperar a hasta que se ejecuta ese proceso y hasta que no de una respuesta no va a continuar con la siguiente linea.
+En node las utilidades, la mayoria pueden funcionar de manera sincrona y asincrona, de manera **sincrona**, quiere decir que el **va a esperar a hasta que se ejecuta ese proceso y hasta que no de una respuesta no va a continuar con la siguiente linea**.
 
-En node cuando se ejecuta de manera sincrona necesitamos usar callbacks porque es la manera en la que el sabe cuando ya terminamos, ejecute mi código que quiero procesar despues de que hizo todo lo que tenia que hacer esté modulo
+En node **cuando se ejecuta de manera sincrona necesitamos usar callbacks** porque es la manera en la que el sabe cuando ya terminamos, ejecute mi código que quiero procesar despues de que hizo todo lo que tenia que hacer esté modulo
 
 Usando la **readFileSync** que lee los datos de manera sincrona.
 
@@ -466,7 +513,7 @@ try {
 }
 ```
 
-Vamos a hacer lo mismo de manera asincrona, pero esta vez no tenemos que especificar que es *readFileSync* sino que es simplemente **readFile**, porque por defecto Nodejs trata de ser asincrono.
+Vamos a hacer lo mismo de manera asincrona, pero esta vez no tenemos que especificar que es *readFileSync* sino que es simplemente **readFile**, porque **por defecto Nodejs trata de ser asincrono**.
 
 ```js
 const fs = require('fs');
@@ -487,9 +534,13 @@ const content = fs.readFile(file, (err, content) => {
 })
 ```
 
-El modulo file system no solo nos permite leer archivos sino que en el también podemos crear carpetas, leer directorios, crear archivos, eliminar archivos, etc. Es todo lo que un usuario puede hacer con archivos y carpetas.
+El **módulo file system** no solo nos permite leer archivos sino que en el también podemos **crear carpetas, leer directorios, crear archivos, eliminar archivos, etc**. Es todo lo que un usuario puede hacer con archivos y carpetas.
 
-También podemos visitar la documentación de Nodejs 12.0 sobre [FileSystem]()
+También podemos visitar la documentación de Nodejs 12.0 sobre [FileSystem](https://nodejs.org/api/fs.html#fs_file_system)
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Administrar directorios y archivos
 
@@ -507,7 +558,7 @@ const files = fs.readdir(__dirname, (err, files) => {
 })
 ```
 
-Creamos directorios o carpetas con mkdir desde node
+Creamos directorios o carpetas con **mkdir desde node**.
 
 ```js
 // Creamos direcorios o carpetas.
@@ -519,7 +570,7 @@ fs.mkdir("ejemplo/documents/node", { recursive: true }, err => {
 });
 ```
 
-Copiar archivos con Nodejs
+**Copiar archivos con Nodejs**.
 
 ```js
 const fs = require('fs');
@@ -533,10 +584,15 @@ fs.copyFile("naranja.txt", "limon.txt", err => {
   console.log("naranja.txt fue copiado como limon.txt");
 })
 ```
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Consola, utilidades y debuggin
 
-En nodejs tenemos la utilidad consola en ella podemos usar el console.info, console.log, console.error, estamos bastante familiarizados con esta utilidad sinn emabargo todo por defecto lo que imprimimos por consola se va por el **stdout** y todo lo que imprimimos en el console.error se va por el **stderror**. Mediante la clase consola que es diferente a la consola, podemos personalizarlo para decir que en vez se valla por el stdout o stderror, hagamos una cosa completamente diferente.
+En nodejs tenemos la utilidad consola en ella podemos usar el **[console.info]**, **[console.log]**, **[console.error]**, estamos bastante familiarizados con esta utilidad, sin embargo todo por defecto lo que imprimimos por consola se va por el **stdout**, y todo lo que imprimimos en el console.error se va por el **stderror**. 
+Mediante la **clase Consola** que es diferente a la consola, podemos personalizarlo para decir que en vez se valla por el stdout o stderror, hagamos una cosa completamente diferente.
 
 ```js
 // En lugar de usar una consola stdout o stderror
@@ -570,44 +626,48 @@ setInterval(() => {
 
 No solo podemos jugar con la clase de la consola para crear nuestra consola personalizada, si no que también vamos a explorar diferentes utilidades de consola.
 
-console.log por debajo trabaja con una utilidad llamada
-  util format:
+**console.log por debajo trabaja con una utilidad llamada
+  util format**:
   
-- %s: String
-- %n: Número
-- %j: json
+- **%s**: **String**
+- **%n**: **Número**
+- **%j**: **Json**
 
-Estos son pequeños placeholders para formatear nuestros datos.
+Estos son pequeños **placeholders** para formatear nuestros datos.
 ``console.log("Un %s y un %s", "Perrito", "Gatito");``
 
-Si accedemos a la consola de node exactamente esto hace la utilidad **util.format()** es decir la consola se alimenta del paquete util.format y funciona exactamente igual.
+Si accedemos a la consola de node exactamente esto hace la utilidad **util.format()** es decir la consola se alimenta del paquete **[util.format]** y funciona exactamente igual.
 
-Node ocupa este paquete de utilidades para otros paquetes que el expone, pero nos deja la posibilidad de alimentarnos de estas utilidades, es decir si yo por alguna razón quiero hacer uso del util.format lo podemos hacer.
+Node ocupa este paquete de utilidades para otros paquetes que el expone, pero nos deja la posibilidad de alimentarnos de estas utilidades, es decir si yo por alguna razón quiero hacer uso del **[util.format]** lo podemos hacer.
 
 Alias de console.log:
 
-- console.info
+- ``console.info``
 
 Alias de de console.error:
-- console.wran
-
-- console.assert: Si hay un error nos muestra que existe un error en un assert, en un booleano o verificación:
+- ``console.wran``
+<br>
+- **console.assert**: Si hay un error nos muestra que existe un error en un assert, en un booleano o verificación:
 
 ```js
 console.assert(42 == "42");
 console.assert(42 === 42);
 ```
 
-- console.trace: nos inidica la linea donde esta ocurriendo el error que es mucho más especifico.
+- **console.trace**: nos indica la linea donde esta ocurriendo el error que es mucho más especifico.
 
-Una utilidad bastante interesante es una llamada de burlog, lo que tenemos que hacer obtener la utilidad, por la cual node nos la deja abierta para que la hagamos, e invocamos el debuglog, llamando **util.debuglog**. Esto es muy parecido a como funciona el paquete debug de express, pero nosotros básicamente lo que decimos es crear un debuggin.
+Una utilidad bastante interesante es una llamada de [debuglog](https://nodejs.org/dist/latest-v8.x/docs/api/util.html#util_util_debuglog_section), lo que tenemos que hacer obtener la utilidad, por la cual node nos la deja abierta para que la hagamos, e invocamos el debuglog, llamando **util.debuglog**. Esto es muy parecido a como funciona el paquete debug de express, pero nosotros básicamente lo que decimos es crear un debuggin.
 
 Vamos a crear un nuevo debuggin  que va a exponer un namespace que va a ser _foo_ 
 Nosotros podemos imprimir nuestro mensaje de debug "hello"y esto solo solo se imprime si pasamos la variable de entorno NODE_DEBUG con el namespace.
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Deprecate
 
-Cuando hacemos util.deprecate hacemos un wrap de una función que ya está obsoleta y queremos hacer saber a nuestros usuarios que ya no deberia de usar, lo interesante de nuestra función deprecate es que nos permite imprimir un mensaje.
+Cuando hacemos ``util.deprecate`` hacemos un wrap de una función que ya está obsoleta y queremos hacer saber a nuestros usuarios que ya no deberia de usar, lo interesante de nuestra función deprecate es que nos permite imprimir un mensaje.
 
 ```js
 const util = require("util");
@@ -621,17 +681,25 @@ helloPluto();
 
 Esto es bastante util cuando nosotros estamos haciendo refactory y nosotros queremos hacerle saber al usuario que hay ciertas funcionalidades que quizas en una versión más adelante va a desaparecer por completo.
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Debuggin en node
 
-Para hacer debuggin en node lo que debemos usar es el flag ``node --inspect`` y luego especificar al archivo que queremos hacer debuggin. En versiones anteriores de node es decir < 12, hacer uso de node debugg, genera un warning o deprecation warning que es exactamente igual al util-deprecate que aprendimos con anterioridad, esto quiero decir que en futuras versiones de node, esto va a desaparecer. Por lo que la recomendación es empezar a usar el node --inspect desde ahora.
+Para hacer debuggin en node lo que debemos usar es el flag ``node --inspect`` y luego especificar al archivo que queremos hacer debuggin. En versiones anteriores de node es decir < 12, hacer uso de node debugg, genera un ``warning o deprecation warning`` que es exactamente igual al ``util-deprecate`` que aprendimos con anterioridad, esto quiero decir que en futuras versiones de node, esto va a desaparecer. Por lo que la recomendación es empezar a usar el node --inspect desde ahora.
 
 Cuando hacemos el node inspect, el habre un puerto en el localhost:9229 especificado acá en nuestro navegador. Si nos damos cuenta es exactamente la utilidad debuggin que tiene js del lado del cliente.
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Clusters y procesos hijos
 
-Una sola instancia de Node.js corre un solo hilo de ejecución. Para tomar ventaja de los sistemas con multiples core, necesitamos lanzar un cluster de procesos de Node.js para manejar la carga.
+**Una sola instancia de Node.js corre un solo hilo de ejecución**. Para tomar ventaja de los sistemas con multiples core, necesitamos lanzar un **cluster de procesos de Node.js** para manejar la carga.
 
-El módulo cluster nos permite la creación fácil de procesos hijos que comparten el mismo puerto del servidor. Veamos un ejemplo en código:
+El módulo [cluster](https://nodejs.org/dist/latest-v8.x/docs/api/cluster.html#cluster_class_worker) nos permite la creación fácil de procesos hijos que comparten el mismo puerto del servidor. Veamos un ejemplo en código:
 
 ```js
 const cluster = require("cluster");
@@ -685,6 +753,10 @@ En Windows, todavía no es posible establecer un nombre de proceso server en un 
 
 Documentación Oficial de [NodeJs Cluster](https://nodejs.org/api/cluster.html)
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Request y Response Objects
 
 El objeto ``req`` (Request) en Express representa el llamado HTTP y tiene diferentes propiedades del llamado, como la cadena de texto query (Query params), los parámetros de la URL (URL params), el cuerpo (Body), los encabezados (HTTP headers), etc.
@@ -706,6 +778,10 @@ app.get("/user/:id", function(request, response) {
   response.send("user " + request.params.id);
 });
 ```
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ### Exploremos las propiedades más importantes
 
@@ -786,6 +862,10 @@ app.get("/user/:id", function(request, response) {
   response.send("user " + request.params.id);
 });
 ```
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ### Exploremos los métodos más comunes
 
@@ -824,28 +904,37 @@ res.status(404).send("Sorry, we cannot find that!");
 res.status(500).send({ error: "something blew up" });
 ```
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## ¿Qué es express y para que sirve?
 
-Express.js es un framework para crear [Web Apps](https://es.wikipedia.org/wiki/Aplicaci%C3%B3n_web), [Web APIs](https://es.wikipedia.org/wiki/Web_API) o cualquier tipo de [Web Services](https://es.wikipedia.org/wiki/Servicio_web), es libre bajo la licencia MIT.
+[Express.js](https://expressjs.com/es/) es un framework para crear [Web Apps](https://es.wikipedia.org/wiki/Aplicaci%C3%B3n_web), [Web APIs](https://es.wikipedia.org/wiki/Web_API) o cualquier tipo de [Web Services](https://es.wikipedia.org/wiki/Servicio_web), es libre bajo la licencia [MIT](https://es.wikipedia.org/wiki/Licencia_MIT).
 
-Express es muy liviano y minimalista además de ser extensible a través de Middlewares.
+[Express.js](https://expressjs.com/es/) es muy liviano y minimalista además de ser extensible a través de **Middlewares**.
 
-Los Middlewares interceptan el request y el response para ejecutar una acción en medio.
+**Los Middlewares interceptan el request y el response para ejecutar una acción en medio**.
 
 Fechas importantes:
 
-En el 2014 de express fueron adquiridos por una compañia llamada [StrongLoop]
-En septiembre 2015 [IBM] adquirio StrongLoop
-En enero del 2016 IBM anunció que express iba a ser dirigido por la [NodeJs Foundation]()
+- En el **2014** de express fueron adquiridos por una compañia llamada [StrongLoop].
+
+- En septiembre **2015** [IBM] adquirio StrongLoop.
+
+- En enero del **2016** IBM anunció que express iba a ser dirigido por la [NodeJs Foundation](https://foundation.nodejs.org/)
 
 Caracterisiticas de express
 
-- Minimalista
-- Template Engines
-- Routing
-- Middlewares
-- Plugins (como middlewares)
+- **Minimalista**
+- **Template Engines**
+- **Routing**
+- **Middlewares**
+- **Plugins** (como middlewares)
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Crea tu primer servidor en express
 
@@ -853,18 +942,19 @@ empezaremos creando una carpeta llamada movies-api, aquí es donde vamos a const
 
 Para comenzar un proyecto en express lo más recomendable es generar un package.json 
 
-```npm init o npm init -y``
+``npm init o npm init -y``
 
 Vamos a crear algunos scripts que nos serviran durante el desarrollo:
 
 ``"dev": "DEBUG=app:* nodemon index"``
 ``"start": "NODE_ENV=production node index"``
 
-- DEBUG=app*: La variable de entorno debug me imprima todo lo que tenga el namespace de la aplicación.
-- nodemon: Nos permite que cada vez que hagamos un cambio en el servidor refresque automaticamente, de está manera no tengo que estar bajando y subiendo el código.
+- **DEBUG=app***: La variable de entorno debug me imprima todo lo que tenga el namespace de la aplicación.
+- **nodemon**: Nos permite que cada vez que hagamos un cambio en el servidor refresque automaticamente, de está manera no tengo que estar bajando y subiendo el código.
 
-- NODE_ENV=producction: Arrancar el proyecto en modo producción.
-- node index: arrancamos el proyecto con nodejs.
+- **NODE_ENV=producction**: Arrancar el proyecto en modo producción.
+
+- **node index**: arrancamos el proyecto con nodejs.
 
 Como queremos usar una configuración de [eslint]() bien interesante lo que vamos a hacer es crear un archivo *.eslintrc.json* con la siguiente configuración: 
 
@@ -895,7 +985,9 @@ Como queremos usar una configuración de [eslint]() bien interesante lo que vamo
 }
 ```
 
-Por otro lado vamos a configurar nuestro Prettierrc.json. [Prettier]() es una configuración muy interesante que nos permite formatear nuestro código es decir: Muchas veces hay problemas cuando un desarrollador formatea el código de una manera y otro desarrollador formatea el código de otra manera, esto suele ser bastante confunso y suele ser una perdida de tiempo en los call-review. **Prettier** se encargá de que todos los desarrolladores a la hora de hacer commit de su código sea igual, en este ejemplo pondremos algunas reglas, pero cada quien puede acomodarlo a su gusto.
+Por otro lado vamos a configurar nuestro ``Prettierrc.json``. [Prettier]() es una configuración muy interesante que nos permite formatear nuestro código es decir:
+ 
+ Muchas veces hay problemas cuando un desarrollador formatea el código de una manera y otro desarrollador formatea el código de otra manera, esto suele ser bastante confunso y suele ser una perdida de tiempo en los call-review. **Prettier** se encargá de que todos los desarrolladores a la hora de hacer commit de su código sea igual, en este ejemplo pondremos algunas reglas, pero cada quien puede acomodarlo a su gusto.
 
 ```json
 {
@@ -906,9 +998,9 @@ Por otro lado vamos a configurar nuestro Prettierrc.json. [Prettier]() es una co
 ```
 Teniendo esta configuración base lo que vamos a hacer es empezar a instalar nuestras dependencias: **express** para crear nuestro servidor también **dotenv**: sirve para cargar nuestras variables de entorno.
 
-Ahora vamos a instalar nuestras dependencias de desarrollo, estás dependencias a diferencia de las de producción, son dependencias que solo vamos a manejar acá, cuando nosotros desplegamos nuestra aplicación a producción no instalamos nuestras dependencias de desarrollo, esto hace que el código sea más liviano en producción.
+Ahora vamos a instalar nuestras dependencias de desarrollo, estás dependencias a diferencia de las de producción, son dependencias que solo vamos a manejar acá, cuando nosotros desplegamos nuestra aplicación a producción, no instalamos nuestras dependencias de desarrollo, esto hace que el código sea más liviano en producción.
 
-devDependencies:
+**devDependencies**:
 
 ``npm i -D nodemon eslint eslint-config-prettier eslint-plugin-prettier prettier``
 
@@ -953,7 +1045,7 @@ app.listen(config.port, function () {
 })
 ```
 
-Challenge: Crear un servidor que detecte si el año es bisiesto:
+**Challenge**: Crear un servidor que detecte si el año es bisiesto:
 
 ```js
 const express = require('express');
@@ -978,20 +1070,28 @@ app.listen(2000, function () {
   console.log('Litening http://localhost:2000');
 })
 ```
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Anatomía de una API Restful
 
-Rest: que significa representational state transfer (rest) es un estilo de arquitectura para construir web services, no es un standart pero si existe una especificación creada por [Roy Fielding](https://es.wikipedia.org/wiki/Roy_Fielding) el es el confundador de apache server y director de Apache Software fundation también actualmente trabaja como director de adobe.
+**Rest**: que significa _**representational state transfer (rest)**_ es un estilo de arquitectura _para construir web services_, no es un standart pero si existe una especificación creada por [Roy Fielding](https://es.wikipedia.org/wiki/Roy_Fielding) el es el confundador de apache server y director de Apache Software fundation también actualmente trabaja como director de adobe.
 
-Las peticiones HTTP van acompañadas de un “verbo” que define el tipo de petición:
+**Las peticiones HTTP van acompañadas de un “verbo” que define el tipo de petición:**
 
-- GET. Lectura de datos.
-- PUT. Reemplazar datos.
-- PATCH. Actualizar datos en un recurso específico.
-- POST. Creación de datos.
-- DELETE. Eliminación de datos.
+- **GET**: Lectura de datos.
+- **PUT**: Reemplazar datos.
+- **PATCH**: Actualizar datos en un recurso específico.
+- **POST**: Creación de datos.
+- **DELETE**: Eliminación de datos.
 
-No es recomendable habilitar un endpoint de tipo PUT y DELETE para toda nuestra colección de datos, sólo hacerlos para recursos específicos, ya que no queremos que por error se puedan borrar todos nuestros datos.
+No es recomendable habilitar un [endpoint](https://code.tutsplus.com/es/tutorials/a-beginners-guide-to-http-and-rest--net-16340) de tipo PUT y DELETE para toda nuestra colección de datos, sólo hacerlos para recursos específicos, ya que no queremos que por error se puedan borrar todos nuestros datos.
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Estructura de una película con Mockaroo
 
@@ -1031,10 +1131,14 @@ Luego seleccionamos el número de filas (rows) que queremos generar y elegimos e
 <div align="center">
   <img src="./assets/mockaroo-preview.jpg" alt="mockaroo estrucutura">
 </div>
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Implementando un CRUD en expres.js
 
-CRUD viene de las siglas: create read updated and delete esto significa crear, leer, actualizar y eliminar.
+**CRUD** viene de las siglas: _create read updated and delete_ esto significa **crear, leer, actualizar y eliminar**.
 
 Nosotros vamos a obtener las rutas mediante el verbo GET. A continuación se muestran las rutas que vamos a ocupar para trabajar:
 
@@ -1044,7 +1148,7 @@ Nosotros vamos a obtener las rutas mediante el verbo GET. A continuación se mue
 
 Ahora vamos a implementar un crud en nuestro código:
 
-Para crear una ruta necesitamos de express pues es quien nos define el router, luego vamos a usar en esté caso un archivo de mocks, los mocks son archivos falsos, de datos falsos, pero más adelante vamos a aprender cuando nos conectemos con servicios y como conectarnos a la base de datos para traer archivos reales, en este ejemplo lo estamos haciendo, porque lo que nos interesa ahora es entender como se definen las rutas y esos archivos de mocks nos van a servir más adelante para escribir test y verificar.  
+Para crear una ruta necesitamos de ``express`` pues es quien nos define el router, luego vamos a usar en esté caso un archivo de ``mocks``, los **mocks son archivos falsos, de datos falsos**, pero más adelante vamos a aprender cuando nos conectemos con servicios y como conectarnos a la base de datos para traer archivos reales, en este ejemplo lo estamos haciendo, porque lo que nos interesa ahora es entender como se definen las rutas y esos archivos de mocks nos van a servir más adelante para escribir test y verificar.  
 
 ```js
 /**
@@ -1098,9 +1202,13 @@ module.exports = moviesApi;
 
 Ahora nos vamos a nuestro archivo index, removemos las rutas de ejemplo que creamos con anterioridad, e importamos nuestra ruta, como es una función debemos ejecutarla y pasarle nuestra aplicación de express.
 
-Con esto sería suficiente, pero es muy importante crear nuestro archivo de mocks, usamos una aplicación que se llama mockroo que nos ayuda a crear mocks fácilmente de una estructura.  
+Con esto sería suficiente, pero es muy importante crear nuestro archivo de mocks, usamos una aplicación que se llama ``mockroo`` que nos ayuda a crear mocks fácilmente de una estructura.  
 
 El archivo de mocks estará disponible en este repositorio.
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Métodos idempotentes del CRUD
 
@@ -1210,8 +1318,11 @@ function moviesApi(app) {
   module.exports = moviesApi;
 ```
 
-Antes de continuar ya que es un buen momento para hacer commit, me gustaría hablar de algo que se llama el gitignore, es un archivo de configuración que le dice a git que archivos no debemos compartir, hay archivos inecesarios como node_modules entre otras, que no tiene sentido compartirla con las demás, pues esos archivos se generan por el sistema operativo o por carpeta o por usuario. La herramienta de [ignore.io](http://gitignore.io/) me permite definir precisamente esos hambientes, como nuestro proyecto es de node vamos a seleccionar ese tag, y como no sabemos quien va a poder usar esté proyecto, podemos agregar las 3 sistemas operativos, windows, mac y linux.
+Antes de continuar ya que es un buen momento para hacer commit, me gustaría hablar de algo que se llama el ``gitignore``, es un archivo de configuración que le dice a git que archivos no debemos compartir, hay archivos inecesarios como ``node_modules`` entre otras, que no tiene sentido compartirla con las demás, pues esos archivos se generan por el sistema operativo o por carpeta o por usuario. La herramienta de [ignore.io](http://gitignore.io/) me permite definir precisamente esos hambientes, como nuestro proyecto es de node vamos a seleccionar ese tag, y como no sabemos quien va a poder usar esté proyecto, podemos agregar las 3 sistemas operativos, windows, mac y linux.
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Implementando una capa de servicios en express
 
@@ -1220,14 +1331,15 @@ Está aquitectura es una versión simplificada de [Clean Architecture](https://t
 <div align="center">
   <img src="./assets/clean-arquitect.png" alt="clean arquitect">
 </div>
+<br>
 
-¿Por que la comparto o la recomiendo?
+**¿Por que la comparto o la recomiendo?**
 
-Porque MVC que es la arquitectura tradicional a la que estamos acostumbrados, se queda corta en las aplicaciones modernas, no nos basta solo con tener: modelo, vista y controlador. Entonces lo que nosotros definimos en una aplicación en express: **los controladores que son toda la capa de middlewares y el router** que se comunican con la API y reciben o envían JSON, luego temos una capa de servicios, aquí es muy importante porque aquí es el corazón de nuestra aplicación, aquí es donde está toda la logica de negocio y es importante saber que **los controladores NO llaman a otros controladores** los controladores **solo llaman servicios**. Pero los servicios si pueden llamar otros servicios o llamar librerias, las librerías son la capa que esta adjunta a librerias externas, como por ejemplo: bases de datos, bases de datos que estan en la nube o incluso otras API. 
+Porque MVC que es la arquitectura tradicional a la que estamos acostumbrados, se queda corta en las aplicaciones modernas, **no nos basta** solo con tener: **modelo, vista y controlador**. Entonces lo que nosotros definimos en una aplicación en express: **los controladores que son toda la capa de middlewares y el router** que se comunican con la API y reciben o envían JSON, luego temos una **capa de servicios**, esta capa es muy importante porque aquí esta el corazón de nuestra aplicación, aquí es donde está toda la logica de negocio y es importante saber que **los controladores NO llaman a otros controladores** los controladores **solo llaman servicios**. Pero **los servicios si pueden llamar otros servicios o llamar librerias**, las librerías **son** la capa que esta adjunta a **librerias externas**, como por ejemplo: **bases de datos, bases de datos que estan en la nube o incluso otras API**. 
 
 Diferentes razones y opiniones sobre porque dejar de usar MVC:
 
-- [Cleand coder](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
+- [Clean coder](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Ryan Florence](https://www.youtube.com/watch?v=kp-NOggyz54)
 - [Laravel no es mvc](https://styde.net/porque-laravel-no-es-mvc-y-tu-deberias-olvidarte-de-mvc/)
 - [Twitt sobre mvc por founder de Laravel](https://twitter.com/taylorotwell/status/262290285499936768)
@@ -1353,34 +1465,39 @@ function moviesApi(app) {
 
   module.exports = moviesApi;
 ```
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Creación de una BD en MongoAtlas
 
 En este modulo aprenderemos como podemos conectarnos a servicios externos en Express.js gracias a la arquitectura que implementamos donde tenemos nuestras rutas, nuestros servicios y librerías, podemos conectarnos a cualquier servicio o cualquier base de datos externa de una manera muy sencilla.
 
-En está ocación vamos a usar Mongo Atlas para conectarnos a una instancia de MongoDB, mongodb es un sistema de base de datos no relacional, los llamados NO-SQL _not only sql_.
+En está ocación vamos a usar Mongo Atlas para conectarnos a una instancia de MongoDB, **mongodb es un sistema de base de datos no relacional**, los llamados **NO-SQL _not only sql_**.
 
-Para esta ocación vamos a hacer uso de nuestras variables de entorno, de está manera por cada enviroment, vamos a usar diferentes configuraciones, es decir en desarrollo vamos a conectarnos a una instancia o podríamos fácilmente conectarnos a una instancia local, en stagin el enviroment de pruebas o en producción deberíamos usar diferentes bases de datos.
+Para esta ocación vamos a hacer uso de nuestras variables de entorno, de está manera **por cada enviroment**, **vamos a usar diferentes configuraciones**, es decir en desarrollo vamos a conectarnos a una instancia o podríamos fácilmente conectarnos a una instancia local, en staging el enviroment de pruebas, o en producción deberíamos usar diferentes bases de datos.
 
 La uri de **mongodb** tiene está estructura.
 
 <div align="center">
   <img src="./assets/uri-mongo.png" alt="uri-mongo">
 </div>
+<br>
 
 Donde necesita el 
-- usuario de base de datos
-- el host
-- el nombre
+- **usuario de base de datos**
+- **el host**
+- **el nombre de la base de datos**
 
-Todo esto lo vamos a representar en variables de entorno para que a la hora de cambiar de hambiente, sea muy fácil de remplazarlo, te voy a mostrar como podemos conectarnos en el código.
+Todo esto lo vamos a representar en variables de entorno para que a la hora de cambiar de ambiente, sea muy fácil de remplazarlo, te voy a mostrar como podemos conectarnos en el código.
 
 1. Crear una cuenta en [Mongo Atlas](https://www.mongodb.com/cloud/atlas)
-2. Podemos hacer click en start free o try free, ambos nos llevan al mismo formulario para crear nuestra instancia gratuita
+2. Podemos hacer click en **start free** o **try free**, ambos nos llevan al mismo formulario para crear nuestra instancia gratuita.
 3. Vamos a llenar el formulario con: email, nombre y apellido, para el password recomendamos un administrador de contraseñas y recomendamos [lastpast](https://www.lastpass.com)
 4. Nos pide aceptar terminos y condiciones
-5. Podemos elegir cualquier provedor entre: Amazon web services, google cloud o Azure
-6. En este caso eligiremos Amazon
+5. Podemos elegir cualquier provedor entre: **Amazon web services, google cloud o Azure**
+6. En este caso eligiremos **Amazon**
 7. Despues nos inidica cuales de las regiones tienen la disponibilidad de crear una instancia gratuita, vamos a dejar la que tiene por defecto.
 8. Despues nos muestra una configuración que tiene por defecto y podemos simplemente darle en create cluster.
 
@@ -1388,7 +1505,7 @@ Mientras que mongodb crea el cluster podemos revisar ciertas configuraciones com
 
 Permitir que se conecte cualquier IP no es tan grave porque de todas maneras necesitamos el usuario y contraseña, pero es muy buena práctica restringir las conexiones por IP.
 
-Vamos a configurar el Network Access y vamos a indicarle que nos deje acceder desde cualquier parte, confirmamos y el crea el registro.
+Vamos a configurar el **Network Access** y vamos a indicarle que nos deje acceder desde cualquier parte, confirmamos y el crea el registro.
 
 Otra cosa que debemos hacer si nuestra base de datos ya está lista, es crear un usuario en Database Access, en está ocación vamos a elegir a un usuario que solo puede leer y escribir en nuestra base de datos
 
@@ -1396,22 +1513,26 @@ Ejemplo de user:
 
 ``db_user_platzivideos``
 
-``7Puyn0l6TnOw``
+``6Poyn0l6TnOw``
 
 Finalmente vamos a revizar si el cluster se está creando, normalmente toma un tiempo porque lo interesante de mongodb atlas a diferencia de otros servicios, es que el crea unas replicas, un cluster se compone de 3 instancias de mongodb, estó hace qu tengamos alta disponibilidad a diferencia de otros servicios, entonces vamos a esperar un momento a que termine de crear nuestra instancia de mongo.
 
-Una vez creada debemos tomar los datos de conexión, para esto le damos en connect en cualquiera de las opciones nos proporciona la uri que debemos usar, que es muy similar a la imagen que mostramos con aterioridad. Lo único que nos falta para complementar nuestra uri es la base de datos. 
+Una vez creada debemos tomar los datos de conexión, para esto le damos en **connect** en cualquiera de las opciones nos proporciona la uri que debemos usar, que es muy similar a la imagen que mostramos con aterioridad. Lo único que nos falta para complementar nuestra uri es la base de datos. 
 
-Para esto nos vamos a collecctions, en el nos dice las bases de datos que tenemos en esté caso son 0, y lo que le vamos a decir es **Add my own data**, en el podemos dar un nombre a la base de datos, en esté caso la vamos a llamar *platzivideos_db* y el nombre de la colleccion va a ser *Movies*, la creamos y estamos listos para poder ingresar nuestra uri en el código.
+Para esto nos vamos a **collecctions**, en el nos dice las bases de datos que tenemos en esté caso son 0, y lo que le vamos a decir es **Add my own data**, en el podemos dar un nombre a la base de datos, en esté caso la vamos a llamar *platzivideos_db* y el nombre de la colleccion va a ser *Movies*, la creamos y estamos listos para poder ingresar nuestra uri en el código.
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Conexión a MongoAtlas una instancia de MongoDB
 
-Ya que tenemos nuestra cuenta en mongodb atlas nos disponemos a crear la conexión en nuestra apliación.
+Ya que tenemos nuestra cuenta en mongodb atlas nos disponemos a crear la conexión en nuestra aplicación.
 
 1. instalar el paquete ``npm i mongodb``
 2. Vamos a crear 2 archivos: ``.env.example`` y el archivo ``.env``
 
-El archivo .env.example es necesario para que cualquier otro desarrollador que tome nuestro proyecto sepa que variables de entorno debe alimentar localmente, mientras que el archivo .env van a ser las variables de entorno y va a ser alimentada por el archivo de configuración, esté nunca debe ser subido a base de datos, porque si no estamos exponiendo nuestras credenciales y cualquiera que tenga acceso al repositorio podría tomarlas, ya se han problemas por situaciones como está.
+El archivo .env.example es necesario para que cualquier otro desarrollador que tome nuestro proyecto sepa que variables de entorno debe alimentar localmente, mientras que el archivo ``.env`` van a ser las variables de entorno y va a ser alimentada por el archivo de configuración, **esté nunca debe ser subido a base de datos, porque si no estamos exponiendo nuestras credenciales y cualquiera que tenga acceso al repositorio podría tomarlas**, ya se han problemas por situaciones como está.
 
 ```js
 # CONFIG
@@ -1426,7 +1547,7 @@ DB_HOST=
 DB_NAME=
 ```
 
-Ahora lo que hace falta es alimentar nuestro archivo de configuración con estás variables de entorno, lo que vamos a hacer es ir a nuestro archivo .env.example y copiar las variables de entorno, ir a nuestro archivo de configuración y agregarlas, las copiamos del env.examples para no borrar los valores y que fuera más sencillo.
+Ahora lo que hace falta es alimentar nuestro archivo de configuración con estás variables de entorno, lo que vamos a hacer es ir a nuestro archivo ``.env.example`` y copiar las variables de entorno, ir a nuestro archivo de configuración y agregarlas, las copiamos del ``env.examples`` para no borrar los valores y que fuera más sencillo.
 
 archivo de configuración:
 ```js
@@ -1489,6 +1610,10 @@ class MongoLib {
   }
 }
 ```
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Implementación de las acciones de MongoDB
 
@@ -1497,6 +1622,7 @@ Las acciones son básicamente lo que es compatible con el CRUD:
 <div align="center">
   <img src="./assets/mongodb.png" alt="crud mongo">
 </div>
+<br>
 
 Documentación de mongo:
 
@@ -1553,6 +1679,10 @@ class MongoLib {
 
 Ya que hemos implementado nuestras acciones en la librería de mongo, en nuestra capa de servicios podemos remover los mocks, usar directamente está librería y así tener persistencia en la base de datos.
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Conexión de nuestros servicios con MongoDB
 
 Ya que implementaste las acciones en la librería de mongo, nos vamos a disponer a coger la capa de servicios, remover los mocks e implementar esa librería y en está ocación ya tendremos persistencia de datos.
@@ -1597,7 +1727,7 @@ class MoviesService {
 module.exports = MoviesService;
 ```
 
-Si vamos a crear un registro por medio de [postman]() cuando hacemos el send, vamos a tener un error y es porque el aún no saber como leer los datos que le estamos pasando, por defecto express necesita parcear estos datos JSON. La manera de corregirlo es agregando un Middleware desde el index.js
+Si vamos a crear un registro por medio de [postman]() cuando hacemos el send, vamos a tener un error y es porque el aún no sabe como leer los datos que le estamos pasando, **por defecto express necesita parcear estos datos JSON**. La manera de **corregirlo es agregando un Middleware desde el index.js**
 
 ```js
 const express = require('express');
@@ -1626,26 +1756,32 @@ app.listen(config.port, function () {
 
 Una vez funcionando nos damos cuenta que nuestro servicio está siendo persistente con la base de datos.
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## ¿Qué es un middleware?
 
-Un middleware es una pieza de software que está en medio de otras 2, se le suele describir como software glue, es decir pegamento de software y es porque nos ayuda a conectar otras piezas de software, pensemos por un momento en la población y en el agua, que es un recurso natural, si queremos que esté recurso natural llegue a la población deberíamos insertar en el medio en esté caso un middleware que sería un sistema de tuberias, el sistema de tuberías nos permite conectar el agua a la población, pero nosotros podemos seguir agregando middlewares, podemos agregar un middleware que se encargue de purificar el agua y luego podríamos poner otro middleware que se encargue de contar el consumo del agua.
+Un **middleware** es una pieza de software que está en medio de otras 2, se le suele describir como **software glue**, es decir pegamento de software y es porque nos ayuda a conectar otras piezas de software, pensemos por un momento en la población y en el agua, que es un recurso natural, si queremos que esté recurso natural llegue a la población deberíamos insertar en el medio, en esté caso un middleware que sería un sistema de tuberias, el sistema de tuberías nos permite conectar el agua a la población, pero nosotros podemos seguir agregando middlewares, podemos agregar un middleware que se encargue de purificar el agua y luego podríamos poner otro middleware que se encargue de contar el consumo del agua.
 
-En express especificamente, la manera en como funcionan los middlewares es mediante la firma del: request-object, response-object y la funcionalidad next.
+**En express** especificamente, la manera en como funcionan los **middlewares** es mediante la firma del: **request-object, response-object y la funcionalidad next**.
 
 <div align="center">
  <img src="./assets/middleware.png" alt="middleware">
 </div>
 
-nosotros hemos visto algo muy similar en nuestro código: el req, res y la funcionalidad next, lo que nos permite es que en el middleware podemos hacer cualquier ejecución de código, podemos modificar el request-object, podemos modificar el response-object y la manera en como llamamos al siguiente middleware es a travez de la funcionalidad next, si por alguna razón le pasamos un párametro a la funcionalidad next, se ejecutan los middlewares de error.
+nosotros hemos visto algo muy similar en nuestro código: **el req, res y la funcionalidad next**, lo que nos permite es que en el middleware podemos hacer cualquier ejecución de código, _podemos modificar el request-object, podemos modificar el response-object_ y la manera en como llamamos al siguiente middleware es a travez de la funcionalidad next, si por alguna razón le pasamos un párametro a la funcionalidad next, se ejecutan los middlewares de error.
 
-Nosotros lo que vamos a hacer como ejemolo del mundo real es, crear toda una capa de manejo de errores de un middleware, pero los middleware en next del formato err, tienen una firma diferente, y es que en vez de recibir los 3 páramtros, van a recibir un cuarto párametro que va a ser el error, de está manera podemos maniuplar el error y decir como lo imprimimos y llamar el next con un error o no para saber si llamamos nuestro siguiente middleware de manejo de error, te voy a enseñar como puedes hacerlo en tu código:
+Nosotros lo que vamos a hacer como ejemplo del mundo real es, crear toda una capa de manejo de errores de un middleware, pero **los middleware en next del formato err, tienen una firma diferente, y es que en vez de recibir los 3 párametros, van a recibir un 4 párametros** que va a ser el ``error``, de está manera podemos manipular el error y decir como lo imprimimos y llamar el next con un error o no para saber si llamamos nuestro siguiente middleware de manejo de error, te voy a enseñar como puedes hacerlo en tu código:
 
 1. En nuestra carpeta de utilidades vamos a crear una nueva carpeta que se llamará middleware.
-2. Creamos un archivo llamado errorHandlers.js
+2. Creamos un archivo llamado ``errorHandlers.js``
 3. Vamos a traer nuestro archivo de configuración porque dependiendo si estamos en modo desarrollo o modo producción, quiero que el error que nos imprima incluya el stack del error o no, recuerda que el stack es toda la configuración relaciona al error.
-4. Crearemos una funcion que va a ser nuestro middleware que se encargará de imprimir nuestros errores, el cual recibe: **err, req, res, next**
+
+4. Crearemos una funcion que va a ser nuestro middleware que se encargará de imprimir nuestros errores, el cual recibe: **err, req, res, next**.
+
 5. El otro middleware que vamos a crear es que nos va a ayudar a darle manejo al error, por defecto express, como imprime los errores es en formato html, como nosotros estamos implementando una api lo más necesario es que sean en formato JSON.
+
 6. Para poder determinar si agregamos el stack o no es crear otra función de ayuda, esto no es un middleware que se llamará *withErrorStack*, en ella vamos a recibir: **err, stack** 
 
 ```js
@@ -1677,7 +1813,7 @@ module.exports = {
 };
 ```
 
-Ahora vamos a ir a nuestro index y así como agregamos nuestro middleware del bodyParser, podemos agregar los otros middlewares.
+Ahora vamos a ir a nuestro index y así como agregamos nuestro middleware del ``bodyParser``, podemos agregar los ``otros middlewares``.
 
 ```js
 const express = require('express');
@@ -1715,7 +1851,12 @@ app.listen(config.port, function () {
 
 De está manera podemos implementar una capa del manejo de errores usando un middleware en express, a continuación dejaremos una lectura de las capas de manejo de errores, en ella no solo sabrás como implementar la capa de manejo de errores para código asincrono, sino también para código sincrono.
 
-## Manejor de erroes asíncronos y síncronos en Express
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
+-- Me quede aqui.......------
+## Manejador de erroes asíncronos y síncronos en Express
 
 El manejo de errores en Express es el proceso de capturar un error de manera asíncrona como síncrona . Por defecto Express viene con un manejador de errores por defecto, así que no es necesario escribir uno para empezar a usarlo.
 
@@ -1765,6 +1906,9 @@ app.get("/", function(req, res, next) {
     .catch(next); // Errores serán pasados a Express.
 });
 ```
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Capa de validación de datos a travéz de un middleware
 
@@ -1775,6 +1919,10 @@ Cuando tenemos estos datos en la función retornamos una función que tiene la f
 
 <div align="center">
   <img src="./assets/validationHandler.png" alt="validationHandler">
+</div>
+<br>
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
 </div>
 
 ## ¿Qué es Join y Boom?
@@ -1866,6 +2014,10 @@ app.use(notFoundHandler);
 ```
 
 Ahora si intentamos hacer una llamada con una ruta inexistente nos marcará el error 404 de Boom.
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Implementando Joi
 
@@ -1978,6 +2130,10 @@ Porque el PUT no solo recibe el párametro si no que también recibe el cuerpo, 
   }
 ```
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Middlewares populares en Express.js
 
 A continuación te compartiré una lista de los middlewares más populares en Express.
@@ -2019,6 +2175,10 @@ Passport es un middleware que nos permite establecer diferentes estrategias de a
 Puedes encontrar más middlewares populares en el siguiente enlace:
 http://expressjs.com/en/resources/middleware.html
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Debugging e inspect
 
 ### Haciendo debugging
@@ -2052,6 +2212,9 @@ Por lo que recomiendo los scripts en nuestro archivo ``package.json`` de la sigu
     "debug": "DEBUG=express:*,app:* npm run start",
   },
 ```
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ### Ejecutando el modo inspect en desarrollo
 
@@ -2062,6 +2225,10 @@ El modulo ``inspect`` de Node.js nos permite ejecutar un ambiente para hacer deb
     "inspect": "DEBUG=express:*,app:* nodemon --inspect index"
   },
 ```
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ### Creación de test para nuestros endpoints
 
@@ -2220,6 +2387,9 @@ Los Test son muy importante hacerlos en el código, porque si en un futuro hacen
  
 **Los test son una buena manera de poder asegurar que nuestro código tiene calidad y que si en el futuro hay cambios, no se va a poder romper nuestro código**. 
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Creación de Test para nuestros servicios
 
@@ -2235,6 +2405,10 @@ Luego vamos a hacer la creación de nuestros structs.
 El primero sería getAll de mongo, uno de los métodos que tienen los structs es por ejemplo decidir que cuando se llamé con ciertos argumentos resuelva con cierta respuesta, en esté caso vamos a decir que cuando lo llamé con movies que sería la collection que le va a pasar el servicio a la librería de mongo, pues resuelva con nuestros mocks de las peliculas.
 
 Ahora lo que debemos hacer es crear un nuevo archivo para los test de nuestros servicios, el cual vamos a llamar
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Creación de Test para nuestras utilidades 
 
@@ -2285,6 +2459,10 @@ describe.only('utils - buildMessage', function () {
 
 Con esté ejemplo introductorio de TD, nos hemos dado cuenta como nos puede ayudar a hacer refactori de una forma mucho más segura, o incluso evitar que halla bugs en un futuro cuando por alguna razón sucede.
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Agregando un comando coverage
 
 Los Test son muy importantes, pero también es muy importante asegurarnos que estamos probando todos los caminos de una funcionalidad a la hora de hacer test, un comando de coverage nos permite identificar en donde estamos fallando y como los podemos corregir.
@@ -2329,6 +2507,10 @@ Challenge: Termina el resto de los test de las rutas, servicios y utilidades.
 
 Hacer test puede ser mucho más complicado que incluso estár escribiendo código pero te recomiendo que tengas mucha pasiencia.
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Considerenado las mejores prácticas para el despliegue 
 
 En esté punto ya tu apliación está lista para el despliegue, pero lo que debemos considerar unas muy buenas prácticas para el lanzamiento a producción.
@@ -2356,6 +2538,10 @@ Https: la conexiónes por https son encriptadas y seguras, si por alguna vez un 
 
 Cors: sirve para que no todos los clientes se conecten a nuestro backend y no nos hagan cosas maliciosas, lo otro que es importante es que esté revisando las buenas prácticas de seguridad, que explores librerías como helmer o que revises open web application security project (owasp).
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Variables de entorno, CORS y HTTPS
 
 ### Como usar las variables de entorno para diferente ambientes
@@ -2371,6 +2557,10 @@ Para ello se debe acceder al servidor remoto:
 
 Como lo hemos dicho antes no se debe hacer commit del archivo ``.env`` y este debe estar en el ``.gitignore``, ademas se recomienda manejar solo un archivo ``.env``. Más información: https://github.com/motdotla/dotenv#faq
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ### Cuando no es posible acceder al servidor remoto
 
 Algunos servicios como [Heroku](https://www.heroku.com/) o [Now](https://zeit.co/home) no nos permiten acceder a un servidor remoto pues la administración del servidor es controlada por los mismos servicios, sin embargo cada servicio tiene sus mecanismos para establecer las variables de entorno:
@@ -2378,9 +2568,17 @@ Algunos servicios como [Heroku](https://www.heroku.com/) o [Now](https://zeit.co
 - [Configuración de variables de entorno en Heroku](https://devcenter.heroku.com/articles/config-vars)
 - [Configuración de variables de entorno en Now](https://zeit.co/docs/v2/serverless-functions/env-and-secrets)
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ### Variables de entorno de forma nativa
 
 El uso del archivo .env junto con la biblioteca dotenv es un mecanismo que nos facilita la configuración de variables de entorno pero si por alguna razón las quisiéramos cargar de manera nativa, es decir desde el sistema operativo recomiendo este tutorial de [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps)
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ### Habilitando CORS en producción
 
@@ -2392,6 +2590,9 @@ El Intercambio de Recursos de Origen Cruzado (Cross-Origin Resource Sharing) es 
 
 Si necesitamos permitir request desde un dominio diferente al del servidor podemos usar el middleware ``cors`` para permitirlo, pero es importante no dejarlo expuesto a todos los dominios.
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ### Habilitar CORS para todos los request (No recomendado en producción)
 
@@ -2410,6 +2611,10 @@ app.listen(8000, function() {
   console.log("CORS-enabled web server listening on port 8000");
 });
 ```
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ### Habilitar CORS para los request específicos de un cliente (Recomendado para producción)
 
@@ -2436,13 +2641,25 @@ Debemos tener en cuenta que para aplicaciones server-side es poco probable que n
 Más información sobre el middleware CORS en
 https://expressjs.com/en/resources/middleware/cors.html
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ### Cómo funciona y por qué es importante el uso de HTTPS
 
 El Protocolo Seguro de Transferencia de Hipertexto (HTTPS) es un protocolo HTTP que funciona en el puerto 443 y utiliza un cifrado basado en SSL (Secure Sockets Layer) / TLS (Transmission Layer security) con el fin de crear un canal de comunicación seguro entre el cliente y el servidor.
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ### Por qué usar HTTPS
 
 Una de las razones por la cual siempre debemos usar sitios con HTTPS es que sin este cualquier individuo podría efectuar ataques conocidos como [man-in-the-middle](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) o [eavesdropping](https://en.wikipedia.org/wiki/Eavesdropping) y obtener nuestro usuario y contraseña en el momento en que intentamos acceder a este servicio que no tiene HTTPS establecido.
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ### Cómo funciona
 
@@ -2452,6 +2669,10 @@ Una de las razones por la cual siempre debemos usar sitios con HTTPS es que sin 
 4. El servidor usa su llave privada para comprobar el pre-master secret.
 5. En ese momento tanto el cliente como el servidor usan el pre-master secret para generar un master secret que es usado como una llave simétrica.
 6. Teniendo este par de llaves ya se pueden enviar mensajes seguros entre ellos.
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ### Cómo habilitar HTTPS en nuestro servidor
 
@@ -2464,6 +2685,10 @@ Más información:
 - https://devcenter.heroku.com/articles/ssl
 - https://devcenter.heroku.com/articles/automated-certificate-management
 - https://zeit.co/docs/v1/features/certs
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Como implementar una capa de manejo de caché en express
 
@@ -2522,6 +2747,10 @@ Lo que vamos a hacer es agregar cache solo a la lista de peliculas y cuando vamo
   );
 ```
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## ¿Cómo contener tu aplicación en Docker?
 
 Para contener nuestra aplicación en Docker y ejecutarla lo primero es asegurarnos que tenemos instalado Docker.
@@ -2555,6 +2784,10 @@ Si el contenedor les corre, pero no pueden acceder a la api mediante ``http://lo
 
 [Instrucciones](https://docs.docker.com/install/linux/docker-ce/ubuntu/) para la instalación de Docker en Ubuntu.
 
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
 ## Despliegue en now
 
 En está sección aprenderas a como desplegar tu aplicación en un servicio llamado now. [now]() es un servicio serverless es decir no tenemos que preocuparnos en infraestructura, ya que a media que tu aplicación tiene cierta demanda, now se encarga de escalar la aplicación por nosotros.
@@ -2572,7 +2805,7 @@ Ahora lo primero que tenemos que hacer es considerar nuestras variables de entor
 
 La manera en como now nos permite administrar nuestras variables de entorno, es mediante algó llamado secrets, un secret lo que hace es guardar nuestra variable de entorno y nunca más nos deja acceder a ese resultado, así podemos cuidarnos de que nadie venga nuestra máquina y nos saque el valor de la variable de entorno, la manera en como se hace es con ``now secret add nombreVariableEntorno``, y así sucesivamente con todas nuestras variables de entorno.
 
-El archivo ``.now`` que usaremos para el despliegue quedaría de la siguiente manera:
+El archivo ``now.json`` que usaremos para el despliegue quedaría de la siguiente manera:
 ```json
 {
   "name": "platzivideo",
@@ -2603,6 +2836,8 @@ constructor() {
     this.dbName = DB_NAME;
   }
 ```
-
-
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+<br>
 
