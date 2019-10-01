@@ -13,7 +13,7 @@ const MONGO_URI = `mongodb+srv://${USER}:${PASSWORD}@${config.dbHost}:${config.d
 // mongodb+srv://db_user_platzivideos:<password>@cluster0-nnl4g.mongodb.net/test?retryWrites=true&w=majority
 class MongoLib {
   constructor() {
-    this.client = new MongoClient(MONGO_URI, { useNewUrlParser: true });
+    this.client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
     this.dbName = DB_NAME;
   }
 

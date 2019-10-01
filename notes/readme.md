@@ -2216,7 +2216,393 @@ Vamos a escribir otro test, esté test que vamos a escribir, es el test que nos 
 
 Si volvemos a correr nuestros test y funcionará bien si los mensajes de los test son iguales a de las rutas.
 
-Los Test son muy importante hacerlos en el código, porque si en un futuro hacen cambios, el test nunca se rompa, por ejemplo si en un futuro por alguna razón, llegarán y sin ninguna intención, cambiarán el mensaje que sería un error, si corremos nuestros test nos van a fallar y nos va a decir que no es exactamente igual. 
+Los Test son muy importante hacerlos en el código, porque si en un futuro hacen cambios, el test nunca se rompa, por ejemplo si en un futuro por alguna razón, llegarán y sin ninguna intención, cambiarán el mensaje que sería un error, si corremos nuestros test nos van a fallar y nos va a decir que no es exactamente igual.
+ 
 **Los test son una buena manera de poder asegurar que nuestro código tiene calidad y que si en el futuro hay cambios, no se va a poder romper nuestro código**. 
+
+
+## Creación de Test para nuestros servicios
+
+En está sección aprenderas a crear los test para nuestra capa de servicios, al igual que con la capa de rutas, aquí lo que nos interesa, es que los servicios sean testeados en lo que va a devolver y no las librería que llamá, por lo que debemos mockear la librería de mongo, te mostraré como puedes hacerlo en el código.
+
+_Lo que vamos a hacer es que vamos a ir a nuestra carpeta de utilis - mocks y vamos a crear un nuevo mock que sería para librería de mongo_
+
+vamos a requerir **sinon**, **sinon** lo que **nos permite crear struct o mocks** **sinon** cada vez que creamos un nuevo struct, les inyecta unas propiedades si estos fueron llamados o no. Entonces es super útil para que podamos en nuestros servicos probar cuando el servicio fue ejecuta si llamó los métodos de las respectivas librerías.
+
+También vamos a traer de los **mocks**, los mocks que creamos con anterioridad de las peliculas y de la funcionalidad ``filteredMoviesMock``, esto es con el fin de cuando se haga un test con los tags podamos simular que se filtro, lo llamos que estamos en la misma carpeta de mocks. 
+Luego vamos a hacer la creación de nuestros structs. 
+
+El primero sería getAll de mongo, uno de los métodos que tienen los structs es por ejemplo decidir que cuando se llamé con ciertos argumentos resuelva con cierta respuesta, en esté caso vamos a decir que cuando lo llamé con movies que sería la collection que le va a pasar el servicio a la librería de mongo, pues resuelva con nuestros mocks de las peliculas.
+
+Ahora lo que debemos hacer es crear un nuevo archivo para los test de nuestros servicios, el cual vamos a llamar
+
+## Creación de Test para nuestras utilidades 
+
+Vamos a crear test para nuestras utilidades pero esta vez vamos a hacerlo haciendo uso de td, la técnica de td trata primero crear los test y luego la funcionalidad, personalmente considero que hay unos caso que vale la pena usar td, por ejemplo cuando se tiene muy claro cuál es la lógica de negocio, si tu tienes muy clara la lógica de negocio, muy fácil puedes crear los test y luego solucionarlo en la funcionalidad, si no es claro la verdad no va a funcionar td para nada, otro caso donde es muy común hacer td es cuando tienes un bug, escribes un test que va a fallar porque existe el bug, corriges el bug y luego el test debería pasar, así aseguras que ese bug no va a volver a suceder porque ya tienes un test que lo impide, vamos a ver como se hace en el código. Lo que vamos a solucionar en esté caso es una utilidad que vamos a crear para que imprima los mesajes de nuestras rutas, recuerden que nosotros en nuestra ruta simpre devolvemos un mensaje.
+
+Nosotros quisieramos automatizar estó, entonces vamos a crear una utilidad que haga eso, la cual vamos a llamar **buildMessage** y como estamos haciendo td, lo único que vamos a definir es el cuerpo de la utilidad, que en esté caso va a recibir una entidad, porque así lo defini en mi lógica de negocio, la cúal vamos a exportar. Por ahora está utilidad no hace nada, porque primero vamos a escribir los test y a media que vamos resolviendo los test es lo que nos va a determinar como solucionamos esa utilidad.
+
+1. En la carpeta test vamos crear un nuevo archivo llamado *utils.buildMessage.test.js*.
+
+```js
+function buildMessage(entity, action) {
+  if (action === 'list') {
+    return `${entity}s ${action}ed`;
+  }
+  return `${entity} ${action}d`;
+}
+
+module.exports = buildMessage;
+```
+
+Lo que vamos a definir en nuestros test es que cuando enviemos ciertos mensajes, obtengamos cierta respuesta.
+
+```js
+// nos permite verificar si el test es correcto o no.
+const assert = require('assert');
+
+const buildMessage = require('../utils/buildMessage');
+
+// vamos a definir en nuestros test que cuando enviemos cierto mensaje obtengamos cierta respuesta.L0
+describe.only('utils - buildMessage', function () {
+  describe('When recieves an entity and acction', function () {
+    it('should return the respective message', function () {
+      const result = buildMessage('movie', 'create');
+      const expect = "movie created";
+      assert.strictEqual(result, expect);
+    });
+  });
+
+  describe('when recives an entity and an action and is a list', function () {
+    it('should return the respective message with the entity in plural', function () {
+      const result = buildMessage('movie', 'list');
+      const expect = 'movies listed';
+      assert.strictEqual(result, expect);
+    });
+  });
+});
+```
+
+Con esté ejemplo introductorio de TD, nos hemos dado cuenta como nos puede ayudar a hacer refactori de una forma mucho más segura, o incluso evitar que halla bugs en un futuro cuando por alguna razón sucede.
+
+## Agregando un comando coverage
+
+Los Test son muy importantes, pero también es muy importante asegurarnos que estamos probando todos los caminos de una funcionalidad a la hora de hacer test, un comando de coverage nos permite identificar en donde estamos fallando y como los podemos corregir.
+
+Para correr nuestro reporte de covegare, lo primero que tenemos que hacer es instalar una nueva herrmienta que se llamá **nyc**. ``npm i -D nyc``
+**nyc**: hace parte de una herramienta llamada **istabul**.
+Luego lo que necesitamos crear es nuestro comando el packages.json
+```json
+{
+    "scripts": {
+      // El coverast se hace a partir de los test que hallamos creado. con esto
+      //  estamos aplicando el coverast sobre nuestro comando de test
+    "cover": "nyc npm run test",
+// Estás herramientas nos ayudan a crear diferentes reportes, en esté caso
+// quiero que me abra el resporte en mi navegador.
+    "report": "nyc report --reported=html && open coverage/index.html"
+  },
+}
+```
+
+Estás herramientas nos ayudan a generar diferentes reportes, sean para enviroments de integración continua o sea para nuestros ojos, en esté caso vamos a crear un reporte que va ha estár en html.
+
+Lo otro que debemos hacer es configurar como queremos hacer nuestro coverage, para ello nos vamos al final de nuestro package.json, y decimos que _para ncy lo que queremos que testee es:
+```json
+{
+  "nyc": {
+    "all": true,
+    "include": ["routes", "services", "lib", "utils"]
+  }
+}
+``` 
+
+Estó es muy importante porque nos ayuda a vizualizar el nivel de covertura de nuestra aplicación, en el equipo se puede definir un minimo aceptable, la recomendación de minimo aceptable es entre 60 y el 80% porque tiene poco sentido obsecionarse por obtener el 100%, porque es mucho más importante crear producto que simplemente estar creando test.
+
+En esté modulo podimoss vizualizar: 
+
+- Como crear test para nuestros endpoints, servicios y utilidades.
+- Agregando un comando para coverage 
+- Debuggin inspect
+
+Challenge: Termina el resto de los test de las rutas, servicios y utilidades.
+
+Hacer test puede ser mucho más complicado que incluso estár escribiendo código pero te recomiendo que tengas mucha pasiencia.
+
+## Considerenado las mejores prácticas para el despliegue 
+
+En esté punto ya tu apliación está lista para el despliegue, pero lo que debemos considerar unas muy buenas prácticas para el lanzamiento a producción.
+
+Buenas prácticas:
+- Remover constraseñas quemadas
+- Encapsular código spaghetti
+- Revisar la estructura del proyecto
+- Configurar los scripts de build
+- Agregar soporte de cache
+- Añadir HTTPS y CORS
+- Revisar otras prácticas de seguridad.
+
+El termino quemado significa: tener las contraseñas directamente en el código y no en variables o variables de entorno, lo que sucede es que si estas contraseñas se suben al repositorio, podría malisiosamente leerse el archivo .git y sacar eso del historial, incluso si ya lo haz hecho y removido en otro commit, es muy importante que lo elimines del historial.
+
+Aquí hay un lectura para remover los datos confidenciales del historial si te ha pasado: https://help.github.com/es/articles/removing-sensitive-data-from-a-repository
+
+El código spaghetti es ese código que es muy dificil de leer o creece mucho, lo más recomendable es mover porciones de código a diferentes funciones que tengan mucho significado en esa porcion de código en especifico.
+
+Scripts de build: si tu proyecto tienen algún paso de build, como de pronto minificar o transpilar código también es necesario que esté para que se vayan en código optimo para producción.
+
+Soporte de cache: muchas veces cuando requerimos las peliculas, ellas no cambian porque no todo el tiempo se están agregando peliculas nuevas, entonces es importante tener una capa de cache tipo: _en 15 minutos siempre enviame el mismo resultado_, de está manera no tenemos que ir hasta base de datos a traer las peliculas, sino que las traemos del cache del navegador.
+
+Https: la conexiónes por https son encriptadas y seguras, si por alguna vez un usuario y contraseña por una conexión que no es https, fácilmente podría agarrar tu usuario y contraseña porque están en texto plano.
+
+Cors: sirve para que no todos los clientes se conecten a nuestro backend y no nos hagan cosas maliciosas, lo otro que es importante es que esté revisando las buenas prácticas de seguridad, que explores librerías como helmer o que revises open web application security project (owasp).
+
+## Variables de entorno, CORS y HTTPS
+
+### Como usar las variables de entorno para diferente ambientes
+
+Ya vimos cómo en nuestro ambiente local podemos hacer uso de las variables de entorno usando el archivo ``.env`` y la librería ``dotenv.`` Generalmente lo que se recomienda es usar el mismo para los diferentes ambientes como **Staging (Pruebas)** y **Producción**.
+
+Para ello se debe acceder al servidor remoto:
+
+1. Duplicar el archivo ``.env.example`` y renombrarlo por ``.env.``
+2. Cargar las respectivos valores de las variables de entorno.
+3. Usar valores y servicios diferentes para cada ambiente, esto quiere decir que las credenciales de desarrollo, staging y producción deben ser completamente diferente.
+4. Si se quiere tener un backup de estos valores se recomienda usar las notas seguras de aplicaciones como [1Password](https://1password.com/) o [LastPass](https://www.lastpass.com/es).
+
+Como lo hemos dicho antes no se debe hacer commit del archivo ``.env`` y este debe estar en el ``.gitignore``, ademas se recomienda manejar solo un archivo ``.env``. Más información: https://github.com/motdotla/dotenv#faq
+
+### Cuando no es posible acceder al servidor remoto
+
+Algunos servicios como [Heroku](https://www.heroku.com/) o [Now](https://zeit.co/home) no nos permiten acceder a un servidor remoto pues la administración del servidor es controlada por los mismos servicios, sin embargo cada servicio tiene sus mecanismos para establecer las variables de entorno:
+
+- [Configuración de variables de entorno en Heroku](https://devcenter.heroku.com/articles/config-vars)
+- [Configuración de variables de entorno en Now](https://zeit.co/docs/v2/serverless-functions/env-and-secrets)
+
+### Variables de entorno de forma nativa
+
+El uso del archivo .env junto con la biblioteca dotenv es un mecanismo que nos facilita la configuración de variables de entorno pero si por alguna razón las quisiéramos cargar de manera nativa, es decir desde el sistema operativo recomiendo este tutorial de [Digital Ocean](https://www.digitalocean.com/community/tutorials/how-to-read-and-set-environmental-and-shell-variables-on-a-linux-vps)
+
+### Habilitando CORS en producción
+
+El Intercambio de Recursos de Origen Cruzado (Cross-Origin Resource Sharing) es un mecanismo que agrega unos encabezados (Headers) adicionales HTTP para permitir que un user agent (generalmente un navegador) obtenga permisos para acceder a los recursos de un servidor en un origin distinto (dominio) del que pertenece.
+
+**Por ejemplo una solicitud de origen cruzado seria** hacer una petición AJAX desde una aplicación que se encuentra en https://dominio-a.com para cargar el recurso https://api.dominio-b.com/data.json.
+
+  - Por razones de seguridad, los navegadores restringen las solicitudes HTTP de origen cruzado iniciadas dentro de un script.
+
+Si necesitamos permitir request desde un dominio diferente al del servidor podemos usar el middleware ``cors`` para permitirlo, pero es importante no dejarlo expuesto a todos los dominios.
+
+
+### Habilitar CORS para todos los request (No recomendado en producción)
+
+```js
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+app.use(cors());
+
+app.get("/products/:id", function(req, res, next) {
+  res.json({ msg: "This is CORS-enabled for all origins!" });
+});
+
+app.listen(8000, function() {
+  console.log("CORS-enabled web server listening on port 8000");
+});
+```
+
+### Habilitar CORS para los request específicos de un cliente (Recomendado para producción)
+
+```js
+const express = require("express");
+const cors = require("cors");
+const app = express();
+
+const corsOptions = { origin: "http://example.com" };
+
+app.use(cors(corsOptions));
+
+app.get("/products/:id", function(req, res, next) {
+  res.json({ msg: "This is CORS-enabled for only example.com." });
+});
+
+app.listen(8000, function() {
+  console.log("CORS-enabled web server listening on port 8000");
+});
+```
+
+Debemos tener en cuenta que para aplicaciones server-side es poco probable que necesiten el uso de CORS debido a que las aplicaciones conviven en el mismo dominio. Sin embargo, es buena practica habilitarlo para los llamados externos de nuestra API.
+
+Más información sobre el middleware CORS en
+https://expressjs.com/en/resources/middleware/cors.html
+
+### Cómo funciona y por qué es importante el uso de HTTPS
+
+El Protocolo Seguro de Transferencia de Hipertexto (HTTPS) es un protocolo HTTP que funciona en el puerto 443 y utiliza un cifrado basado en SSL (Secure Sockets Layer) / TLS (Transmission Layer security) con el fin de crear un canal de comunicación seguro entre el cliente y el servidor.
+
+### Por qué usar HTTPS
+
+Una de las razones por la cual siempre debemos usar sitios con HTTPS es que sin este cualquier individuo podría efectuar ataques conocidos como [man-in-the-middle](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) o [eavesdropping](https://en.wikipedia.org/wiki/Eavesdropping) y obtener nuestro usuario y contraseña en el momento en que intentamos acceder a este servicio que no tiene HTTPS establecido.
+
+### Cómo funciona
+
+1. El cliente envía un mensaje al servidor y este responde con su certificado publico.
+2. El cliente comprueba que este certificado sea valido y toma la llave publica.
+3. El cliente genera una cadena llamada pre-master secret y la cifra usando la llave publica del servidor y se lo envía.
+4. El servidor usa su llave privada para comprobar el pre-master secret.
+5. En ese momento tanto el cliente como el servidor usan el pre-master secret para generar un master secret que es usado como una llave simétrica.
+6. Teniendo este par de llaves ya se pueden enviar mensajes seguros entre ellos.
+
+### Cómo habilitar HTTPS en nuestro servidor
+
+Dependiendo el servicio de hosting que estemos usando puede ofrecernos o no una instalación de certificados de seguridad SSL/TLS que pueden tener algún costo. Sin embargo existen servicios como [Let’s Encrypt](https://letsencrypt.org/) que permiten la instalación de este certificado completamente gratis. Servicios como Now y Heroku ofrecen HTTPS por defecto.
+
+Más información:
+
+- https://letsencrypt.org/how-it-works/ 
+- https://www.digitalocean.com/community/tutorials/how-to-secure-nginx-with-let-s-encrypt-on-ubuntu-16-04
+- https://devcenter.heroku.com/articles/ssl
+- https://devcenter.heroku.com/articles/automated-certificate-management
+- https://zeit.co/docs/v1/features/certs
+
+## Como implementar una capa de manejo de caché en express
+
+Lo primero que vamos a hacer es crear un archivo en utilidades llamado time.js, donde vamos a establecer unos tiempos.
+
+```js
+// el cache se mide en segundos
+const FIVE_MINUTES_IN_SECONDS = 300;
+const SIXTY_MINUTES_IN_SECONDS = 3600;
+
+module.exports = {
+  FIVE_MINUTES_IN_SECONDS,
+  SIXTY_MINUTES_IN_SECONDS
+};
+```
+
+Teniendo esos tiempos ahora puedo manejar mi utilidad menejo de cache, en la misma carpeta de utilidades, crearemos un archivo que se va llamar **cacheResponse.js**, importamos nuestra configuración porque una de las cosas más molestas de desarrollo es el cache activado, porque muchas veces estamos haciendo modificaciones en nuestro código y notamos que recibimos la misma respuesta y estó es culpa del cache.
+
+Lo mas sano para el desarrollador es verificar si no tenemos el cache activado.
+
+Para ello nuestra funcionalidad solo se va a ejecutar response, si no estamos en modo desarrollo. Le vamos a pasar el response porque es el que modificamos para agregar el cache, y los segundos que queremos aplicar.
+
+```js
+const { config } = require('../config/index');
+
+function cacheResponse(res, seconds) {
+  if (!config.dev) {
+    res.set('Cache-Control', `public, max-age=${seconds}`);
+  }
+}
+
+module.exports = cacheResponse;
+```
+
+Ahora debemos ir a nuestras rutas y agregarle cache a las rutas necesarias. **No todas las rutas deben tener cache** _las rutas que deben requerir cache deben ser las rutas en las que estamos requeriendo recursos_ Porque si vamos a crear un recurso, es decir una pelicula nueva, no debería de haber cache porque sucedio en ese momento. Pero si estamos requeriendo peliculas es posible que agregar peliculas sea un proceso que no sea inmediato, que lo hagá muy de vez en cuando, entonces tiene sentido dejar eso en el cache.
+
+Lo que vamos a hacer es agregar cache solo a la lista de peliculas y cuando vamos a obtener una lista especifica.
+
+```js
+// Traer todas las peliculas
+  router.get('/', async function (req, res, next) {
+    cacheResponse(res, FIVE_MINUTES_IN_SECONDS);
+    const { tags } = req.query;
+  //  ... try{} catch(){}
+  });
+
+  // Obtener movie por id
+  router.get(
+    '/:movieId',
+    validationHandler(joi.object({ movieId: movieIdSchema }), 'params'),
+    async function (req, res, next) {
+      cacheResponse(res, SIXTY_MINUTES_IN_SECONDS);
+      const { movieId } = req.params;
+      // try {} catch() {}
+    }
+  );
+```
+
+## ¿Cómo contener tu aplicación en Docker?
+
+Para contener nuestra aplicación en Docker y ejecutarla lo primero es asegurarnos que tenemos instalado Docker.
+
+Podemos seguir las instrucciones para Windows en https://docs.docker.com/docker-for-windows/install/ o las instrucciones para Mac en https://docs.docker.com/docker-for-mac/install/.
+
+Luego lo que debemos hacer es crear un nuevo archivo llamado ``Dockerfile`` y en el insertamos el siguiente contenido:
+
+```json
+FROM node:10-alpine
+WORKDIR /srv/app
+COPY . .
+RUN npm install
+EXPOSE 3000
+ENV NODE_ENV=production
+CMD ["node", "index.js"]
+```
+Con el siguiente script creamos una imagen con nuestro de nuestro aplicativo.
+
+``docker build -t movies-api .``
+
+Con el siguiente script podemos ejecutar nuestra imagen en modo ``detach``.
+
+``docker run -d movies-api``
+
+Si nos dirigimos a ``http://localhost:3000`` deberíamos ver nuestra API funcionando.
+
+Si el contenedor les corre, pero no pueden acceder a la api mediante ``http://localhost:3000``, deténganlo y corran el comando run de la siguiente manera:
+
+``docker run -p 3000:3000 -d movies-api``
+
+[Instrucciones](https://docs.docker.com/install/linux/docker-ce/ubuntu/) para la instalación de Docker en Ubuntu.
+
+## Despliegue en now
+
+En está sección aprenderas a como desplegar tu aplicación en un servicio llamado now. [now]() es un servicio serverless es decir no tenemos que preocuparnos en infraestructura, ya que a media que tu aplicación tiene cierta demanda, now se encarga de escalar la aplicación por nosotros.
+
+Para hacer uso del servicio de now debemos ir a:
+https://zeit.co/download
+
+Los más recomedable es descargar la aplicación de escritorio pues no solo nos muestra un menú donde podemos ver el status de nuestras descargas, sino que también nos descarga una utilidad de terminal.
+
+La descarga es muy fácil pues NOW CLI se descarga usando ``npm`` o ``yarn``.
+con npm ``npm i -g now``
+con yarn ``yarn global add now``
+
+Ahora lo primero que tenemos que hacer es considerar nuestras variables de entorno, pues si instalamos nuestra aplicación si pasarselas al despliegue no van a tener ningún valor, lo que vamos a hacer es que las vamos a sacar de el archivo ``.env``.
+
+La manera en como now nos permite administrar nuestras variables de entorno, es mediante algó llamado secrets, un secret lo que hace es guardar nuestra variable de entorno y nunca más nos deja acceder a ese resultado, así podemos cuidarnos de que nadie venga nuestra máquina y nos saque el valor de la variable de entorno, la manera en como se hace es con ``now secret add nombreVariableEntorno``, y así sucesivamente con todas nuestras variables de entorno.
+
+El archivo ``.now`` que usaremos para el despliegue quedaría de la siguiente manera:
+```json
+{
+  "name": "platzivideo",
+  "version": "2",
+  "builds": [{"src": "index.js", "use": "@now/node"}],
+  "routes": [{ "src": "/(.*)", "dest": "/index.js" }],
+  "env": {
+    "DB_USER": "@platzivideos-db-user",
+    "DB_PASSWORD": "@platzivideos-db-password",
+    "DB_HOST": "@platzivideos-db-host",
+    "DB_NAME": "@platzivideos-db-name"
+  }
+}
+```
+
+Si al desplegar nuestra aplicación con now dev nos muestra un error cuando se conecta a la base de datos de mongo como:
+
+``
+(node:414) DeprecationWarning: current Server Discovery and Monitoring engine is deprecated, and will be removed in a future version. To use the new Server Discover and Monitoring engine, pass option { useUnifiedTopology: true } to the MongoClient constructor.
+Connected succesfully to mongo
+``
+Tenemos que agregar el nuevo motor de descubrimiento del monitoreo del servidor.
+``{ useUnifiedTopology: true }``, lo hacemos de la siguiente manera:
+
+```js
+constructor() {
+    this.client = new MongoClient(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+    this.dbName = DB_NAME;
+  }
+```
+
 
 

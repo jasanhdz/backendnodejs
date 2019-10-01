@@ -1,0 +1,12 @@
+{
+  "name": "movies-api",
+  "version": 2,
+  "builds": [{"src": "index.js", "use": "@now/node-server"}],
+  "routes": [{ "src": "/(.*)", "dest": "/index.js" }],
+  "env": {
+    "DB_USER": "@platzivideos-db-user",
+    "DB_PASSWORD": "@platzivideos-db-password",
+    "DB_HOST": "@platzivideos-db-host",
+    "DB_NAME": "@platzivideos-db-name"
+  }
+}
