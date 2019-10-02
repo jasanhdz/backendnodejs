@@ -2,8 +2,80 @@
   <h1>Backend con Node.js</h1>
 </div>
 
+<div align="center">
+  <img src="./assets/nodejs-logo.svg"
+    width="60%"
+   alt="nodejs-logo">
+</div>
+
 ## Tabla de contenido
 - [¿Qué es Node.js y para que sirve?](#qué-es-nodejs-y-para-que-sirve)
+- [Fechas importantes de NodeJS](#fechas-importantes-de-nodejs)
+- [Diferencias entre NodeJs y Javascript](#diferencias-entre-nodejs-y-javascript)
+- [Instalación de Node.js](#instalación-de-nodejs)
+- [Arquitectura orientada a eventos](#arquitectura-orientada-a-eventos)
+- [Event Emiter](#event-emiter)
+- [Primer Servidor HTTP](#primer-servidor-http)
+- [Sreams](#sreams)
+- [Readable y Writable Streams](#readable-y-writable-streams)
+- [Duplex y Transforms streams](#duplex-y-transforms-streams)
+- [Uso de utilidades que tiene NodeJS](#uso-de-utilidades-que-tiene-nodejs)
+  - [Utilidades del sistema operativo](#utilidades-del-sistema-operativo)
+  - [Utilidades con el sistema de archivos](#utilidades-con-el-sistema-de-archivos)
+- [Administrar directorios y archivos](#administrar-directorios-y-archivos)
+- [Consola, utilidades y debuggin](#consola-utilidades-y-debuggin)
+- [Deprecate](#deprecate)
+- [Debuggin en node](#debuggin-en-node)
+- [Clusters y procesos hijos](#clusters-y-procesos-hijos)
+- [Request y Response Objects](#request-y-response-objects)
+  - [Request body](#request-body)
+  - [Request params](#request-params)
+  - [Request query](#request-query)
+  - [Response object](#response-object)
+- [Exploremos los métodos más comunes](#exploremos-los-métodos-más-comunes)
+  - [Response end()](#response-end)
+  - [Response json()](#response-json)
+  - [Response send()](#response-send)
+- [¿Qué es express y para que sirve?](#qué-es-express-y-para-que-sirve)
+  - [Crea tu primer servidor en express](#crea-tu-primer-servidor-en-express)
+- [Anatomía de una API Restful](#anatomía-de-una-api-restful)
+- [Estructura de una película con Mockaroo](#estructura-de-una-película-con-mockaroo)
+- [Implementando un CRUD en express.js](#implementando-un-crud-en-expressjs)
+  - [Métodos idempotentes del CRUD](#métodos-idempotentes-del-crud)
+- [Implementando una capa de servicios en express](#implementando-una-capa-de-servicios-en-express)
+- [Creación de una BD en MongoAtlas](#creación-de-una-bd-en-mongoatlas)
+  - [Conexión a MongoAtlas una instancia de MongoDB](#conexión-a-mongoatlas-una-instancia-de-mongodb)
+  - [Implementación de las acciones de MongoDB](#implementación-de-las-acciones-de-mongodb)
+  - [Conexión de nuestros servicios con MongoDB](#conexión-de-nuestros-servicios-con-mongodb)
+- [¿Qué es un middleware?](#qué-es-un-middleware)
+- [Manejador de erroes asíncronos y síncronos en Express](#manejador-de-erroes-asíncronos-y-síncronos-en-express)
+- [Capa de validación de datos a travéz de un middleware](#capa-de-validación-de-datos-a-travéz-de-un-middleware)
+- [¿Qué es Join y Boom?](#qué-es-join-y-boom)
+  - [Implementando Boom](#implementando-boom)
+  - [Implementando Joi](#implementando-joi)
+- [Middlewares populares en Express.js](#middlewares-populares-en-expressjs)
+- [Debugging e inspect](#debugging-e-inspect)
+  - [Haciendo debugging](#haciendo-debugging)
+- [Ejecutando el modo inspect en desarrollo](#ejecutando-el-modo-inspect-en-desarrollo)
+- [Tests](#tests)
+  - [Creación de test para nuestros endpoints](#creación-de-test-para-nuestros-endpoints)
+  - [Creación de Test para nuestros servicios](#creación-de-test-para-nuestros-servicios)
+  - [Creación de Test para nuestras utilidades](#creación-de-test-para-nuestras-utilidades)
+  - [Agregando un comando coverage](#agregando-un-comando-coverage)
+- [Considerenado las mejores prácticas para el despliegue](#considerenado-las-mejores-prácticas-para-el-despliegue)
+- [Variables de entorno, CORS y HTTPS](#variables-de-entorno-cors-y-https)
+  - [Como usar las variables de entorno para diferentes ambientes](#como-usar-las-variables-de-entorno-para-diferentes-ambientes)
+  - [¿Cuando no es posible acceder al servidor remoto?](#cuando-no-es-posible-acceder-al-servidor-remoto)
+  - [Variables de entorno de forma nativa](#variables-de-entorno-de-forma-nativa)
+  - [Habilitando CORS en producción](#habilitando-cors-en-producción)
+  - [Habilitar CORS para todos los request (No recomendado en producción)](#habilitar-cors-para-todos-los-request-no-recomendado-en-producción)
+  - [Habilitar CORS para los request específicos de un cliente (Recomendado para producción)](#habilitar-cors-para-los-request-específicos-de-un-cliente-recomendado-para-producción)
+- [Cómo funciona y por qué es importante el uso de HTTPS](#cómo-funciona-y-por-qué-es-importante-el-uso-de-https)
+  - [Por qué usar HTTPS](#por-qué-usar-https)
+  - [Cómo habilitar HTTPS en nuestro servidor](#cómo-habilitar-https-en-nuestro-servidor)
+- [Como implementar una capa de manejo de caché en express](#como-implementar-una-capa-de-manejo-de-caché-en-express)
+- [¿Cómo contener tu aplicación en Docker?](#cómo-contener-tu-aplicación-en-docker)
+- [Despliegue en now](#despliegue-en-now)
 
 ## ¿Qué es Node.js y para que sirve?
 
@@ -45,7 +117,7 @@ Nodejs fue tomar el engine de JS chrome V8 para crear un entorno de ejecución y
 
 En Javascript tenemos el [DOM document object model]() es la interfaz que nos permite interpretar el documento html en javascript como lo es el objeto window, también tenemos el [CSSDOM]() que es la interfaz que nos permite **manipular el css** en javascript, por otro lado tenemos el [FetchAPI](https://developer.mozilla.org/es/docs/Web/API/Fetch_API) que por el cual podemos hacer **request** y que nos devuelva una promesa, también tenemos toda la capa de [webstorage](https://www.w3schools.com/html/html5_webstorage.asp) que consiste en el [sessionStorage](https://developer.mozilla.org/es/docs/Web/API/Window/sessionStorage) y el [localStorage](https://developer.mozilla.org/es/docs/Web/API/Window/localStorage) que eso no existe en nodejs, tenemos el modulo de [canvas API](https://developer.mozilla.org/es/docs/Web/HTML/Canvas) que nos permite hacer gráficos en la web en 2D y 3D y apartir de ahi tenemos una seríe de APIS como lo son: el [Web Bluetooth AP](https://developer.mozilla.org/en-US/docs/Web/API/Web_Bluetooth_API), [AudioAPI](https://developer.mozilla.org/es/docs/Web_Audio_API) y [webAutenthicationAPI](https://developer.mozilla.org/en-US/docs/Web/API/Web_Authentication_API).
 
-Por otro lado en Nodejs tenemos una serie de modulos:
+Por otro lado **en Nodejs** tenemos una serie de modulos:
 - **Http**: permite crear servidores 
 - **Sistema operativo**: nos permite comunicarnos entre el sistema operativo y darnos información sobre el.
 - **Utilidades**: que son una serie de utilidades excusivas para nodejs
@@ -54,6 +126,10 @@ Por otro lado en Nodejs tenemos una serie de modulos:
 - **Eventos**: podemos definir acciones y dispararlas más adelantel. 
 - **Ecmascript Modules**: se pueden ejecutar en nodejs mediante un feature *flag*
 - **Consola**: es muy similar a la del navegador.
+
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
 
 ## Instalación de Node.js
 
@@ -198,7 +274,7 @@ logger.execute(() => setTimeout(() => console.log("Hello World"), 500));
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
 </div>
 
-## Primer Servidor
+## Primer Servidor HTTP
 
 En esta ocación tenemos que leer codígo e interpratar lo que se esta haciendo:
 
@@ -783,9 +859,7 @@ app.get("/user/:id", function(request, response) {
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
 </div>
 
-### Exploremos las propiedades más importantes
-
-**req.body**
+### Request body
 
 Contiene los pares de llave-valor de los datos enviados en el cuerpo (body) del llamado (request). Por defecto es ``undefined`` pero es establecido cuando se usa algún “body-parser” middleware como ``body-parser`` y ``multer``.
 
@@ -810,7 +884,11 @@ app.post("/profile", upload.array(), function(req, res, next) {
 
 Más información sobre los diferentes formatos que puede tener el body: https://developer.mozilla.org/es/docs/Web/HTTP/Methods/POST
 
-**req.params**
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
+### Request params
 
 Esta propiedad contiene un objeto con las propiedades equivalentes a los parámetros nombrados en la ruta. Por ejemplo, si tenemos una ruta de la forma ``/user/:name`` entonces la propiedad ``name`` está disponible como ``req.params.name`` y allí podremos ver su valor. Supongamos que llamaramos a la ruta con /user/glrodasz, entonces el valor de ``req.params.name`` sería ``glrodasz``. Este objeto por defecto tiene el valor de un objeto vacío ``{}``.
 
@@ -820,7 +898,11 @@ req.params.name;
 // => "glrodasz"
 ```
 
-**req.query**
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
+### Request query
 
 Esta propiedad contiene un objeto con las propiedades equivalentes a las cadenas de texto query de la ruta. Si no hay ninguna cadena de texto query tendrá como valor por defecto un objeto vacío ``{}``.
 
@@ -841,7 +923,11 @@ req.query.shoe.type;
 
 Más información sobre los query strings en: https://es.wikipedia.org/wiki/Query_string y https://tools.ietf.org/html/rfc3986#section-3.4
 
-**Response Object**
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
+### Response Object
 
 El objeto ``res`` representa la respuesta HTTP que envía una aplicación en Express.
 
@@ -867,9 +953,9 @@ app.get("/user/:id", function(request, response) {
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
 </div>
 
-### Exploremos los métodos más comunes
+## Exploremos los métodos más comunes
 
-**res.end()**
+### Response end()
 
 Finaliza el proceso de respuesta. Este método viene realmente del core de Node.js, específicamente del método ``response.end()`` de ``http.ServerResponse``.
 
@@ -880,7 +966,11 @@ res.end();
 res.status(404).end();
 ```
 
-**res.json()**
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
+### Response json()
 
 Envía una respuesta JSON. Este método envía una respuesta (con el content-type correcto) y convierte el parámetro enviado a una cadena de texto JSON haciendo uso de ``JSON.stringify()``.
 
@@ -892,7 +982,11 @@ res.json({ user: "tobi" });
 res.status(500).json({ error: "message" });
 ```
 
-**res.send()**
+<div align="right">
+  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
+</div>
+
+### Response send()
 
 Envía una respuesta HTTP. El parámetro ``body`` puede ser un objeto tipo _Buffer_, una cadena de texto, un objeto, o un arreglo. Por ejemplo:
 
@@ -918,13 +1012,13 @@ res.status(500).send({ error: "something blew up" });
 
 Fechas importantes:
 
-- En el **2014** de express fueron adquiridos por una compañia llamada [StrongLoop].
+- En el **2014** de express fueron adquiridos por una compañia llamada [StrongLoop](https://en.wikipedia.org/wiki/Strongloop).
 
-- En septiembre **2015** [IBM] adquirio StrongLoop.
+- En septiembre **2015** [IBM](https://es.wikipedia.org/wiki/IBM) adquirio StrongLoop.
 
-- En enero del **2016** IBM anunció que express iba a ser dirigido por la [NodeJs Foundation](https://foundation.nodejs.org/)
+- En enero del **2016** [IBM](#https://es.wikipedia.org/wiki/IBM) anunció que express iba a ser dirigido por la [NodeJs Foundation](https://foundation.nodejs.org/)
 
-Caracterisiticas de express
+<h4>Caracterisiticas de express</h4>
 
 - **Minimalista**
 - **Template Engines**
@@ -1136,7 +1230,7 @@ Luego seleccionamos el número de filas (rows) que queremos generar y elegimos e
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
 </div>
 
-## Implementando un CRUD en expres.js
+## Implementando un CRUD en express.js
 
 **CRUD** viene de las siglas: _create read updated and delete_ esto significa **crear, leer, actualizar y eliminar**.
 
@@ -1210,7 +1304,7 @@ El archivo de mocks estará disponible en este repositorio.
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
 </div>
 
-## Métodos idempotentes del CRUD
+### Métodos idempotentes del CRUD
 
 Acabamos de ver como podemos listar las peliculas, ahora lo que vamos a ver es el resto de métodos de ``CRUD``, para eso vamos a mirar el código.
 
@@ -1855,12 +1949,12 @@ De está manera podemos implementar una capa del manejo de errores usando un mid
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
 </div>
 
--- Me quede aqui.......------
+
 ## Manejador de erroes asíncronos y síncronos en Express
 
-El manejo de errores en Express es el proceso de capturar un error de manera asíncrona como síncrona . Por defecto Express viene con un manejador de errores por defecto, así que no es necesario escribir uno para empezar a usarlo.
+El manejo de errores en Express es el proceso de capturar un error de manera asíncrona como síncrona . **Por defecto Express viene con un manejador de errores por defecto**, así que no es necesario escribir uno para empezar a usarlo.
 
-Los errores que ocurren de manera síncrona dentro un manejador de rutas o un middleware no requieren trabajo extra. Si un código síncrono lanza un error Express automáticamente capturará el error. Por ejemplo:
+<span style="color:blue; font-weight: bold">Los errores que ocurren de manera síncrona dentro un manejador de rutas o un middleware no requieren trabajo extra. Si un código _síncrono_ lanza un error Express automáticamente capturará el error</span>. Por ejemplo:
 
 ```js
 app.get("/", function(req, res) {
@@ -1912,10 +2006,12 @@ app.get("/", function(req, res, next) {
 
 ## Capa de validación de datos a travéz de un middleware
 
-La capa de validación es necesaria porque cuando estamos consumiendo nuestros endpoints, los endpoints no saben que datos le estamos enviando, si estamos enviando en el caso de una pelicula con titulo o sin titulo, o a la hora de recibir las peliculas el formato del id es correcto, entonces mediante esta middleware podemos validar o podemos especificar unos schemas, de tal manera que podemos especificar que: la pelicula sea de tipo string, queremos que la numeración sea de tipo número, etc. De está manera si por alguna razón el cliente o el usuario ingrese los datos que no son, podemos especificar un error mostrando que partes son requeridas o que partes no tienen el formato, estó le va ha ayudar al cliente o al usuario a que se de cuenta como debe consumir nuestras API.
+La capa de validación es necesaria porque cuando estamos **consumiendo** nuestros **endpoints**, los endpoints no saben que datos le estamos enviando, si estamos enviando en el caso de una pelicula con titulo o sin titulo, o a la hora de recibir las peliculas el formato del id es correcto, entonces mediante este **middleware podemos validar o podemos especificar unos schemas**, de tal manera que podemos especificar que: la pelicula sea de tipo string, queremos que la numeración sea de tipo número, etc. De está manera si por alguna razón el cliente o el usuario ingrese los datos que no son, podemos especificar un error mostrando que partes son requeridas o que partes no tienen el formato, estó le va ha ayudar al cliente o al usuario a que se de cuenta como debe consumir nuestras API.
 
-Para ello vamos a crear una funcionalidad que se va a llamar validationHandler, está funcionalidad va a recibir un schema, el esquema va a determinar cúal es el formato del esquema que vamos a enviar, como segundo párametro le vamos a informar donde queremos checar este esquema, por defecto vamos a checar el body del request, pero también podríamos checar los párametros o el query, etc. 
-Cuando tenemos estos datos en la función retornamos una función que tiene la firma de un middleware, cogemos una utilidad que vamos a llamar validate, en esté caso le vamos a pasar en el req**[check]** checando el body, y le vamos a pasar un schema y esto puede que devuelva o no un error de validación, si devuelve un error, lo que vamos a hacer es llamar a nuestra funcionalidad next con el error. Acuerdence que cuando llamos a nuestra funcionalidad next con un párametro, en esté caso el error, van a empezar a ejecutarse los middlewares de error, si no simplemente llamos a nuestra funcionalidad next y como no le estamos pasando ningun párametro va a llamar al siguiente middleware 
+Para ello vamos a crear una funcionalidad que se va a llamar **validationHandler**, está funcionalidad va a **recibir** un **schema**, el esquema va a determinar cúal es el formato del esquema que vamos a enviar, **como segundo párametro** le vamos a informar **donde queremos checar este esquema**, por defecto vamos a checar el **body del request**, pero también podríamos checar los párametros o el query, etc. 
+Cuando tenemos estos datos en la función retornamos una función que tiene la firma de un middleware, cogemos una utilidad que vamos a llamar validate, en esté caso le vamos a pasar en el req **[check]** checando el body, y le vamos a pasar un schema y esto puede que devuelva o no un error de validación, si devuelve un error, lo que vamos a hacer es llamar a nuestra funcionalidad next con el error. 
+
+Acuerdence que cuando llamos a nuestra funcionalidad **next** con un párametro, en esté caso el error, van a empezar a ejecutarse los middlewares de error, si no simplemente llamos a nuestra funcionalidad next y **como no le estamos pasando ningun párametro va a llamar al siguiente middleware**. 
 
 <div align="center">
   <img src="./assets/validationHandler.png" alt="validationHandler">
@@ -1927,10 +2023,10 @@ Cuando tenemos estos datos en la función retornamos una función que tiene la f
 
 ## ¿Qué es Join y Boom?
 
-Join y Boom son tecnologías del ecositema de hapijs pero son tan buenas, que las vamos a integrar como middleware en nuestra aplicación de express.
+Join y Boom son tecnologías del ecositema de [hapijs](https://hapi.dev/) **pero son tan buenas, que las vamos a integrar como middleware en nuestra aplicación de express**.
 
-Join: Object schema validation, es la librería que nos va a ayudar a validar los schemas.
-Boom: HTPP-friendly error objects. Es un manjeador de errores de una manera mucho más comprensible.
+**Join**: Object schema validation, es la librería que nos va a ayudar a validar los schemas.
+**Boom**: HTPP-friendly error objects. Es un manjeador de errores de una manera mucho más comprensible.
 
 La mejor manera de entenderlos es visitando su documentación oficial.
 
@@ -1939,14 +2035,14 @@ La mejor manera de entenderlos es visitando su documentación oficial.
 
 ## Implementando Boom 
 
-En esta sección aprenderemos a como podemos implementar Boom en nuestro código de express. Lo que haremos será usar boom en nuetros errorsHandlers que definimos con anterioridad, también aprovecharemos para crear nuestro error 404 de tal manera que cuando hagan un request a un endpoint que no existe, respondamos correctamente, te mostraré como hacerlo en el codigó.
+En esta sección aprenderemos a como podemos implementar Boom en nuestro código de express. Lo que haremos será usar boom en nuetros errorsHandlers que definimos con anterioridad, también aprovecharemos para crear nuestro error ``404`` de tal manera que _cuando hagan un **request** a un **endpoint** que no existe, respondamos correctamente_, te mostraré como hacerlo en el codigó.
 
 1. primero necesitamos instalar Boom ``npm i @hapi/boom``
 2. Nos diponemos a ir a nuestro middleware manejador de errores, en el vamos a incluir la dependecia de boom. 
 ```js
 const boom = require('@hapi/boom');
 ```
-3. Como ya nos va a llegar un error boom, vamos a hacer un sprint-operator al error porque ahora el error no solo trae el mensaje, si no que trae unas propiedades como vimos, el **error, statusCode y message**, entonces es necesario hacer esté pequeño cambio 
+3. Como ya nos va a llegar un error boom, vamos a hacer un [spread-operator](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Operadores/Spread_operator) al error porque ahora el error no solo trae el mensaje, si no que trae unas propiedades como vimos, el **error, statusCode y message**, entonces es necesario hacer esté pequeño cambio 
 4. Crearemos un tercer middleware que se llamará **wrapErrors()** porque es posible que en algún punto el error que nos llegué no sea de tipo boom y nosotros queremos que apartir de ahí todos los errores tengan la estructura boom.
 ```js
 function wrapErrors(err, req, res, next) {
@@ -1990,7 +2086,7 @@ function validationHandler(schema, check = "body") {
 }
 ```
 
-También vamos a crear un middleware para menejar los erroes 404, el cual vamos a llamar notFoundHandler.
+También vamos a crear un middleware para menejar los erroes ``404``, el cual vamos a llamar ``notFoundHandler.js``.
 
 ```js
 const boom = require('@hapi/boom');
@@ -2001,7 +2097,7 @@ function notFoundHandler(req, res) { // eslint-disable-line
   res.status(statusCode).json(payload);
 }
 ```
-Está función es un middleware pero no recibe el next, porque para que pueda funcionar, lo más importante es que estó debe ir al final de las rutas, el notFound lo que hace es que se ejecuta cuando ya paso por todas las rutas
+Está función es un **middleware** pero <span style="font-weight: bold; color:blue;">no recibe el next, porque para que pueda funcionar, lo más importante es que estó debe ir al final de las rutas</span>, el ``notFound`` lo que hace es que se ejecuta cuando ya paso por todas las rutas
 
 Ahora solo lo requerimos en nuestro archivo index y lo agregamos al final de las rutas.
 
@@ -2023,7 +2119,7 @@ Ahora si intentamos hacer una llamada con una ruta inexistente nos marcará el e
 
 En esté modulo vamos a implementar joi con nuestra capa de validación de datos.
 
-1. Necesitamos instalar joi como una dependencia ``npm i @hapi/joi``
+1. Necesitamos instalar **joi** como una dependencia ``npm i @hapi/joi``
 2. Vamos a ir a nuestro middleware de validationHandler.
 3. Vamos a requerir joi. Recuerdan que teniamos la funcionalidad validate retornando false, ahora la vamos a implementar.
 ```js
@@ -2104,7 +2200,7 @@ Ahora lo que debemos hacer es aplicar estos esquemas en nuestras rutas, para ell
 
 Inicialmente para el GET no le vamos a aplicar ninguna regla de validation, pero para el GET cuando recibe un id, es decir el especifico si lo vamos a hacer, primero traer nuestro validationHandler el cual también debemos de requerir.
 
-Recuerden que nuestro validationHandler va a recibir un schema y también va a recibir de donde va a sacar los datos, por defecto va a sacarlo del body, pero en el caso del getMovieId lo vamos a sacar de los parametros porque el id viene de los parametros.
+Recuerden que nuestro **validationHandler** va a **recibir** un **schema** y también **va a recibir de donde va a sacar los datos**, por defecto va a sacarlo del body, pero en el caso del getMovieId lo vamos a sacar de los parametros porque el id viene de los parametros.
 
 ```js
  router.get("/:movieId", validationHandler(joi.object({ movieId: movieIdSchema }), 'params'), async function (req, res, next) { 
@@ -2230,9 +2326,12 @@ El modulo ``inspect`` de Node.js nos permite ejecutar un ambiente para hacer deb
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
 </div>
 
-### Creación de test para nuestros endpoints
+## Tests
+---
 
-En esté modulo aprenderemos a crear test con nodejs, la primer suit de test que vamos a crear es para nuestros endpoints que están úbicados a la capa de rutas, su única responsabilidad de test es probar que le llegan los datos y devuelven los datos correspondientes, vamos a ver como se hace en el código.
+## Creación de test para nuestros endpoints
+
+<span style="text-decoration; font-weight:bold; color: brown; text-align: justify;">En esté modulo aprenderemos a crear test con nodejs, la primer suit de test que vamos a crear es para nuestros endpoints que están úbicados a la capa de rutas,</span> **su única responsabilidad de test es probar que le llegan los datos y devuelven los datos correspondientes**, vamos a ver como se hace en el código.
 
 1. Lo primero es instalar nuestras dependencias para los test 
 ``npm i -D mocha supertest sinon proxyquire``
@@ -2282,7 +2381,7 @@ module.exports = {
 };
 ```
 
-3. El próximo pasa va a ser en nuestra carpeta de utilidades crear un test server, esté test es un server que su única misión va a ser levantar un server para pruebas. Los Test siempre se deben correr independientes del server original y más porque en esté caso no queremos levantar todo lo que tienen nuestro server, solo queremos un server muy pequeño que nos ayude a probar.
+3. El próximo va a ser en nuestra carpeta de utilidades, es crear un test server, esté es un server que su única misión va a ser levantar un server para pruebas. **Los Test siempre se deben correr independientes del server original** y más porque en esté caso no queremos levantar todo lo que tienen nuestro server, solo queremos un server muy pequeño que nos ayude a probar.
 
 ```js
 const express = require('express');
@@ -2301,7 +2400,7 @@ function testServer(route) {
 module.exports = testServer;
 ```
 
-Con estó ya tenemos lo necesario para empezar a crear nuestros test, entonces vamos a crear una carpeta que se llamé test y en esté caso como queremos hacer test a las rutas se va a llamar routes.movies.test.js, es buena práctica que esté archivo finalice en **.test.js** 
+Con estó ya tenemos lo necesario para empezar a crear nuestros test, entonces vamos a crear una carpeta que se llamé test y en esté caso como queremos hacer test a las rutas se va a llamar ``routes.movies.test.js``, es buena práctica que esté archivo finalice en **.test.js** 
 
 ```js
 // obtenemos el assert que es el que se encargá de verificar si es verdad o no nuestra
@@ -2383,7 +2482,7 @@ Vamos a escribir otro test, esté test que vamos a escribir, es el test que nos 
 
 Si volvemos a correr nuestros test y funcionará bien si los mensajes de los test son iguales a de las rutas.
 
-Los Test son muy importante hacerlos en el código, porque si en un futuro hacen cambios, el test nunca se rompa, por ejemplo si en un futuro por alguna razón, llegarán y sin ninguna intención, cambiarán el mensaje que sería un error, si corremos nuestros test nos van a fallar y nos va a decir que no es exactamente igual.
+Los Test son muy importante hacerlos en el código, porque si en un futuro hacen cambios, el test nunca se rompan, por ejemplo si en un futuro por alguna razón, llegarán y sin ninguna intención, cambiarán el mensaje que sería un error, si corremos nuestros test nos van a fallar y nos va a decir que no es exactamente igual.
  
 **Los test son una buena manera de poder asegurar que nuestro código tiene calidad y que si en el futuro hay cambios, no se va a poder romper nuestro código**. 
 
@@ -2397,12 +2496,11 @@ En está sección aprenderas a crear los test para nuestra capa de servicios, al
 
 _Lo que vamos a hacer es que vamos a ir a nuestra carpeta de utilis - mocks y vamos a crear un nuevo mock que sería para librería de mongo_
 
-vamos a requerir **sinon**, **sinon** lo que **nos permite crear struct o mocks** **sinon** cada vez que creamos un nuevo struct, les inyecta unas propiedades si estos fueron llamados o no. Entonces es super útil para que podamos en nuestros servicos probar cuando el servicio fue ejecuta si llamó los métodos de las respectivas librerías.
+Vamos a requerir **sinon**. Lo que **nos permite crear struct o mocks**, **sinon** cada vez que creamos un nuevo ``struct``, les ``inyecta unas propiedades`` si estos fueron llamados o no. Entonces es super útil para que en nuestros servicos puedamos probar cuando el servicio fue ejecutado, si llamó los métodos de las respectivas librerías.
 
-También vamos a traer de los **mocks**, los mocks que creamos con anterioridad de las peliculas y de la funcionalidad ``filteredMoviesMock``, esto es con el fin de cuando se haga un test con los tags podamos simular que se filtro, lo llamos que estamos en la misma carpeta de mocks. 
-Luego vamos a hacer la creación de nuestros structs. 
+También vamos a traer de los **mocks**. Los mocks que creamos con anterioridad de las peliculas y de la funcionalidad ``filteredMoviesMock``, esto es con el fin de cuando se haga un test con los tags podamos simular que se filtro. Luego vamos a hacer la creación de nuestros ``structs``. 
 
-El primero sería getAll de mongo, uno de los métodos que tienen los structs es por ejemplo decidir que cuando se llamé con ciertos argumentos resuelva con cierta respuesta, en esté caso vamos a decir que cuando lo llamé con movies que sería la collection que le va a pasar el servicio a la librería de mongo, pues resuelva con nuestros mocks de las peliculas.
+El primero sería ``getAll`` de mongo, uno de los métodos que tienen los ``structs`` es por ejemplo decidir que cuando se llamé con ciertos argumentos resuelva con cierta respuesta, en esté caso vamos a decir que cuando lo llamé con movies que sería la collection que le va a pasar el servicio a la librería de mongo, pues resuelva con nuestros mocks de las peliculas.
 
 Ahora lo que debemos hacer es crear un nuevo archivo para los test de nuestros servicios, el cual vamos a llamar
 
@@ -2412,9 +2510,9 @@ Ahora lo que debemos hacer es crear un nuevo archivo para los test de nuestros s
 
 ## Creación de Test para nuestras utilidades 
 
-Vamos a crear test para nuestras utilidades pero esta vez vamos a hacerlo haciendo uso de td, la técnica de td trata primero crear los test y luego la funcionalidad, personalmente considero que hay unos caso que vale la pena usar td, por ejemplo cuando se tiene muy claro cuál es la lógica de negocio, si tu tienes muy clara la lógica de negocio, muy fácil puedes crear los test y luego solucionarlo en la funcionalidad, si no es claro la verdad no va a funcionar td para nada, otro caso donde es muy común hacer td es cuando tienes un bug, escribes un test que va a fallar porque existe el bug, corriges el bug y luego el test debería pasar, así aseguras que ese bug no va a volver a suceder porque ya tienes un test que lo impide, vamos a ver como se hace en el código. Lo que vamos a solucionar en esté caso es una utilidad que vamos a crear para que imprima los mesajes de nuestras rutas, recuerden que nosotros en nuestra ruta simpre devolvemos un mensaje.
+Vamos a crear test para nuestras utilidades pero esta vez vamos a hacerlo haciendo uso de td, la técnica de **td** <span style="color:red; font-weight:bold;">trata primero crear los test y luego la funcionalidad</span>, personalmente considero que hay algunos casos que vale la pena usar **td**, por ejemplo cuando se tiene muy claro cuál es la lógica de negocio, si tu tienes muy clara la lógica de negocio, muy fácil puedes crear los test y luego solucionarlo en la funcionalidad, si no es claro la verdad no va a funcionar td para nada, otro caso donde **es muy común hacer td es cuando tienes un bug**, escribes un test que va a fallar porque existe el bug, corriges el bug y luego el test debería pasar, así aseguras que ese bug no va a volver a suceder porque ya tienes un test que lo impide, vamos a ver como se hace en el código. Lo que vamos a solucionar en esté caso es una utilidad que vamos a crear para que imprima los mesajes de nuestras rutas, recuerden que nosotros en nuestra ruta simpre devolvemos un mensaje.
 
-Nosotros quisieramos automatizar estó, entonces vamos a crear una utilidad que haga eso, la cual vamos a llamar **buildMessage** y como estamos haciendo td, lo único que vamos a definir es el cuerpo de la utilidad, que en esté caso va a recibir una entidad, porque así lo defini en mi lógica de negocio, la cúal vamos a exportar. Por ahora está utilidad no hace nada, porque primero vamos a escribir los test y a media que vamos resolviendo los test es lo que nos va a determinar como solucionamos esa utilidad.
+Nosotros quisieramos automatizar estó, entonces vamos a crear una utilidad que haga eso, la cual vamos a llamar **buildMessage** y como estamos haciendo **td**, lo único que vamos a definir es el cuerpo de la utilidad, que en esté caso va a recibir una entidad, porque así lo definí en mi lógica de negocio, la cúal vamos a exportar. Por ahora está utilidad no hace nada, primero vamos a escribir los test y a media que vamos resolviendo los test es lo que nos va a determinar como solucionamos esa utilidad.
 
 1. En la carpeta test vamos crear un nuevo archivo llamado *utils.buildMessage.test.js*.
 
@@ -2457,7 +2555,7 @@ describe.only('utils - buildMessage', function () {
 });
 ```
 
-Con esté ejemplo introductorio de TD, nos hemos dado cuenta como nos puede ayudar a hacer refactori de una forma mucho más segura, o incluso evitar que halla bugs en un futuro cuando por alguna razón sucede.
+Con esté ejemplo introductorio de TD, nos hemos dado cuenta como nos puede ayudar a hacer ``refactori`` de una forma mucho más segura, o incluso evitar que halla bugs en un futuro cuando por alguna razón sucede.
 
 <div align="right">
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
@@ -2465,11 +2563,11 @@ Con esté ejemplo introductorio de TD, nos hemos dado cuenta como nos puede ayud
 
 ## Agregando un comando coverage
 
-Los Test son muy importantes, pero también es muy importante asegurarnos que estamos probando todos los caminos de una funcionalidad a la hora de hacer test, un comando de coverage nos permite identificar en donde estamos fallando y como los podemos corregir.
+Los Test son muy importantes, pero también es muy importante asegurarnos que estamos probando todos los caminos de una funcionalidad a la hora de hacer test, un comando de **coverage** nos permite identificar en donde estamos fallando y como los podemos corregir.
 
 Para correr nuestro reporte de covegare, lo primero que tenemos que hacer es instalar una nueva herrmienta que se llamá **nyc**. ``npm i -D nyc``
-**nyc**: hace parte de una herramienta llamada **istabul**.
-Luego lo que necesitamos crear es nuestro comando el packages.json
+**nyc**: hace parte de una herramienta llamada [istabul](https://istanbul.js.org/).
+Luego lo que necesitamos crear es nuestro comando el ``packages.json``
 ```json
 {
     "scripts": {
@@ -2483,9 +2581,9 @@ Luego lo que necesitamos crear es nuestro comando el packages.json
 }
 ```
 
-Estás herramientas nos ayudan a generar diferentes reportes, sean para enviroments de integración continua o sea para nuestros ojos, en esté caso vamos a crear un reporte que va ha estár en html.
+Estás herramientas nos ayudan a generar diferentes reportes, sean para **environments** de integración continua o sea para nuestros ojos, en esté caso vamos a crear un reporte que va ha estár en html.
 
-Lo otro que debemos hacer es configurar como queremos hacer nuestro coverage, para ello nos vamos al final de nuestro package.json, y decimos que _para ncy lo que queremos que testee es:
+Lo otro que debemos hacer es configurar como queremos hacer nuestro coverage, para ello nos vamos al final de nuestro ``package.json``, y decimos que para ncy lo que queremos que testee es:
 ```json
 {
   "nyc": {
@@ -2495,7 +2593,7 @@ Lo otro que debemos hacer es configurar como queremos hacer nuestro coverage, pa
 }
 ``` 
 
-Estó es muy importante porque nos ayuda a vizualizar el nivel de covertura de nuestra aplicación, en el equipo se puede definir un minimo aceptable, la recomendación de minimo aceptable es entre 60 y el 80% porque tiene poco sentido obsecionarse por obtener el 100%, porque es mucho más importante crear producto que simplemente estar creando test.
+Estó es muy importante porque nos ayuda a vizualizar el nivel de covertura de nuestra aplicación, en el equipo se puede definir un **minimo aceptable**, **la recomendación** de minimo aceptable **es entre 60 y el 80%** porque tiene poco sentido obsecionarse por obtener el 100%, porque **es mucho más importante crear producto que simplemente estar creando test**.
 
 En esté modulo podimoss vizualizar: 
 
@@ -2505,7 +2603,7 @@ En esté modulo podimoss vizualizar:
 
 Challenge: Termina el resto de los test de las rutas, servicios y utilidades.
 
-Hacer test puede ser mucho más complicado que incluso estár escribiendo código pero te recomiendo que tengas mucha pasiencia.
+**Hacer test puede ser mucho más complicado que incluso estár escribiendo código pero te recomiendo que tengas mucha pasiencia**.
 
 <div align="right">
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
@@ -2513,9 +2611,9 @@ Hacer test puede ser mucho más complicado que incluso estár escribiendo códig
 
 ## Considerenado las mejores prácticas para el despliegue 
 
-En esté punto ya tu apliación está lista para el despliegue, pero lo que debemos considerar unas muy buenas prácticas para el lanzamiento a producción.
+En esté punto ya tu aplicación está lista para el despliegue, pero lo que debemos considerar unas muy buenas prácticas para el lanzamiento a producción.
 
-Buenas prácticas:
+**Buenas prácticas**:
 - Remover constraseñas quemadas
 - Encapsular código spaghetti
 - Revisar la estructura del proyecto
@@ -2524,19 +2622,19 @@ Buenas prácticas:
 - Añadir HTTPS y CORS
 - Revisar otras prácticas de seguridad.
 
-El termino quemado significa: tener las contraseñas directamente en el código y no en variables o variables de entorno, lo que sucede es que si estas contraseñas se suben al repositorio, podría malisiosamente leerse el archivo .git y sacar eso del historial, incluso si ya lo haz hecho y removido en otro commit, es muy importante que lo elimines del historial.
+El termino **quemado significa**: tener las contraseñas directamente en el código y no en variables o variables de entorno, lo que sucede es que si estas contraseñas se suben al repositorio, podría malisiosamente leerse el archivo .git y sacar eso del historial, incluso si ya lo haz hecho y removido en otro commit, es muy importante que lo elimines del historial.
 
 Aquí hay un lectura para remover los datos confidenciales del historial si te ha pasado: https://help.github.com/es/articles/removing-sensitive-data-from-a-repository
 
-El código spaghetti es ese código que es muy dificil de leer o creece mucho, lo más recomendable es mover porciones de código a diferentes funciones que tengan mucho significado en esa porcion de código en especifico.
+El **código spaghetti** es ese código que es muy dificil de leer o creece mucho, lo más recomendable es mover porciones de código a diferentes funciones que tengan mucho significado en esa porcion de código en especifico.
 
-Scripts de build: si tu proyecto tienen algún paso de build, como de pronto minificar o transpilar código también es necesario que esté para que se vayan en código optimo para producción.
+Scripts de **build**: si tu proyecto tienen algún paso de build, como de pronto minificar o transpilar código también es necesario que esté para que se vayan en código optimo para producción.
 
 Soporte de cache: muchas veces cuando requerimos las peliculas, ellas no cambian porque no todo el tiempo se están agregando peliculas nuevas, entonces es importante tener una capa de cache tipo: _en 15 minutos siempre enviame el mismo resultado_, de está manera no tenemos que ir hasta base de datos a traer las peliculas, sino que las traemos del cache del navegador.
 
-Https: la conexiónes por https son encriptadas y seguras, si por alguna vez un usuario y contraseña por una conexión que no es https, fácilmente podría agarrar tu usuario y contraseña porque están en texto plano.
+**Https**: la conexiónes por https son encriptadas y seguras, si por alguna vez un usuario y contraseña por una conexión que no es https, fácilmente podría agarrar tu usuario y contraseña porque están en texto plano.
 
-Cors: sirve para que no todos los clientes se conecten a nuestro backend y no nos hagan cosas maliciosas, lo otro que es importante es que esté revisando las buenas prácticas de seguridad, que explores librerías como helmer o que revises open web application security project (owasp).
+**Cors**: sirve para que no todos los clientes se conecten a nuestro backend y no nos hagan cosas maliciosas, lo otro que es importante es que esté revisando las buenas prácticas de seguridad, que explores librerías como ``helmer`` o que revises open web ``application security project`` (owasp).
 
 <div align="right">
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
@@ -2544,7 +2642,7 @@ Cors: sirve para que no todos los clientes se conecten a nuestro backend y no no
 
 ## Variables de entorno, CORS y HTTPS
 
-### Como usar las variables de entorno para diferente ambientes
+### Como usar las variables de entorno para diferentes ambientes
 
 Ya vimos cómo en nuestro ambiente local podemos hacer uso de las variables de entorno usando el archivo ``.env`` y la librería ``dotenv.`` Generalmente lo que se recomienda es usar el mismo para los diferentes ambientes como **Staging (Pruebas)** y **Producción**.
 
@@ -2561,7 +2659,7 @@ Como lo hemos dicho antes no se debe hacer commit del archivo ``.env`` y este de
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
 </div>
 
-### Cuando no es posible acceder al servidor remoto
+### ¿Cuando no es posible acceder al servidor remoto?
 
 Algunos servicios como [Heroku](https://www.heroku.com/) o [Now](https://zeit.co/home) no nos permiten acceder a un servidor remoto pues la administración del servidor es controlada por los mismos servicios, sin embargo cada servicio tiene sus mecanismos para establecer las variables de entorno:
 
@@ -2636,7 +2734,7 @@ app.listen(8000, function() {
 });
 ```
 
-Debemos tener en cuenta que para aplicaciones server-side es poco probable que necesiten el uso de CORS debido a que las aplicaciones conviven en el mismo dominio. Sin embargo, es buena practica habilitarlo para los llamados externos de nuestra API.
+Debemos tener en cuenta que para aplicaciones ``server-side`` es poco probable que necesiten el uso de CORS debido a que las aplicaciones conviven en el mismo dominio. Sin embargo, es buena practica habilitarlo para los llamados externos de nuestra API.
 
 Más información sobre el middleware CORS en
 https://expressjs.com/en/resources/middleware/cors.html
@@ -2647,7 +2745,7 @@ https://expressjs.com/en/resources/middleware/cors.html
 
 ### Cómo funciona y por qué es importante el uso de HTTPS
 
-El Protocolo Seguro de Transferencia de Hipertexto (HTTPS) es un protocolo HTTP que funciona en el puerto 443 y utiliza un cifrado basado en SSL (Secure Sockets Layer) / TLS (Transmission Layer security) con el fin de crear un canal de comunicación seguro entre el cliente y el servidor.
+El __Protocolo Seguro de Transferencia__ de Hipertexto (HTTPS) es un protocolo HTTP que **funciona** en el puerto **443** y utiliza un **cifrado** basado en **SSL** (Secure Sockets Layer) / **TLS** (Transmission Layer security) con el fin de crear un canal de comunicación seguro entre el cliente y el servidor.
 
 <div align="right">
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
@@ -2657,13 +2755,9 @@ El Protocolo Seguro de Transferencia de Hipertexto (HTTPS) es un protocolo HTTP 
 
 Una de las razones por la cual siempre debemos usar sitios con HTTPS es que sin este cualquier individuo podría efectuar ataques conocidos como [man-in-the-middle](https://en.wikipedia.org/wiki/Man-in-the-middle_attack) o [eavesdropping](https://en.wikipedia.org/wiki/Eavesdropping) y obtener nuestro usuario y contraseña en el momento en que intentamos acceder a este servicio que no tiene HTTPS establecido.
 
-<div align="right">
-  <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
-</div>
-
 ### Cómo funciona
 
-1. El cliente envía un mensaje al servidor y este responde con su certificado publico.
+1. El cliente envía un mensaje al servidor y este responde con su certificado público.
 2. El cliente comprueba que este certificado sea valido y toma la llave publica.
 3. El cliente genera una cadena llamada pre-master secret y la cifra usando la llave publica del servidor y se lo envía.
 4. El servidor usa su llave privada para comprobar el pre-master secret.
@@ -2692,7 +2786,7 @@ Más información:
 
 ## Como implementar una capa de manejo de caché en express
 
-Lo primero que vamos a hacer es crear un archivo en utilidades llamado time.js, donde vamos a establecer unos tiempos.
+Lo primero que vamos a hacer es crear un archivo en utilidades llamado ``time.js``, donde vamos a establecer unos tiempos.
 
 ```js
 // el cache se mide en segundos
@@ -2709,7 +2803,7 @@ Teniendo esos tiempos ahora puedo manejar mi utilidad menejo de cache, en la mis
 
 Lo mas sano para el desarrollador es verificar si no tenemos el cache activado.
 
-Para ello nuestra funcionalidad solo se va a ejecutar response, si no estamos en modo desarrollo. Le vamos a pasar el response porque es el que modificamos para agregar el cache, y los segundos que queremos aplicar.
+Para ello nuestra funcionalidad solo se va a ejecutar response, si no estamos en modo desarrollo. Le vamos a pasar el ``response`` porque es el que modificamos para agregar el cache, y los segundos que queremos aplicar.
 
 ```js
 const { config } = require('../config/index');
@@ -2803,7 +2897,7 @@ con yarn ``yarn global add now``
 
 Ahora lo primero que tenemos que hacer es considerar nuestras variables de entorno, pues si instalamos nuestra aplicación si pasarselas al despliegue no van a tener ningún valor, lo que vamos a hacer es que las vamos a sacar de el archivo ``.env``.
 
-La manera en como now nos permite administrar nuestras variables de entorno, es mediante algó llamado secrets, un secret lo que hace es guardar nuestra variable de entorno y nunca más nos deja acceder a ese resultado, así podemos cuidarnos de que nadie venga nuestra máquina y nos saque el valor de la variable de entorno, la manera en como se hace es con ``now secret add nombreVariableEntorno``, y así sucesivamente con todas nuestras variables de entorno.
+La manera en como now nos permite administrar nuestras variables de entorno, es mediante algó llamado secrets, ``un secret lo que hace es guardar nuestra variable de entorno y nunca más nos deja acceder a ese resultado``, así podemos cuidarnos de que nadie venga nuestra máquina y nos saque el valor de la variable de entorno, la manera en como se hace es con ``now secret add nombreVariableEntorno``, y así sucesivamente con todas nuestras variables de entorno.
 
 El archivo ``now.json`` que usaremos para el despliegue quedaría de la siguiente manera:
 ```json
@@ -2827,7 +2921,7 @@ Si al desplegar nuestra aplicación con now dev nos muestra un error cuando se c
 (node:414) DeprecationWarning: current Server Discovery and Monitoring engine is deprecated, and will be removed in a future version. To use the new Server Discover and Monitoring engine, pass option { useUnifiedTopology: true } to the MongoClient constructor.
 Connected succesfully to mongo
 ``
-Tenemos que agregar el nuevo motor de descubrimiento del monitoreo del servidor.
+Tenemos que agregar el nuevo motor de descubrimiento al monitoreo del servidor.
 ``{ useUnifiedTopology: true }``, lo hacemos de la siguiente manera:
 
 ```js
@@ -2840,4 +2934,8 @@ constructor() {
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
 </div>
 <br>
-
+Una vez hecho esto, podemos probar nuestra servidor usando now dev, para que lo ejecute de manera local, y escribimos solo now para enviar el servicio a producción, y cada vez que hallá cambios, solo volvemos a hacer now al proyecto.
+<br>
+<br>
+<p align="center" style="font-style: italic;">by: Jasan Hernández :D</p>
+<br>
