@@ -381,7 +381,7 @@ console.log('Servidor en la url http://localhost:8000');
   <small><a href="#tabla-de-contenido">🡡 volver al inicio</a></small>
 </div>
 
-## Sreams 
+## Streams 
 
 **Introducción**:
 
