@@ -1092,6 +1092,8 @@ Por otro lado vamos a configurar nuestro ``Prettierrc.json``. [Prettier]() es un
 ```
 Teniendo esta configuración base lo que vamos a hacer es empezar a instalar nuestras dependencias: **express** para crear nuestro servidor también **dotenv**: sirve para cargar nuestras variables de entorno.
 
+``npm i express dotenv``
+
 Ahora vamos a instalar nuestras dependencias de desarrollo, estás dependencias a diferencia de las de producción, son dependencias que solo vamos a manejar acá, cuando nosotros desplegamos nuestra aplicación a producción, no instalamos nuestras dependencias de desarrollo, esto hace que el código sea más liviano en producción.
 
 **devDependencies**:
